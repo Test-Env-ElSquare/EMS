@@ -1,15 +1,17 @@
-﻿using DAL.Models.Auth;
+﻿using DAL.Models.Identity;
 using DAL.Models.Calculated.Historical;
 using DAL.Models.Calculated.Views;
 using DAL.Models.Definitions;
 using DAL.Models.RealTime;
 using Domain.Models.Definitions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Context
 {
-    public class EmsContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public class EmsContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
+    ApplicationUserRole,IdentityUserLogin<string>,IdentityRoleClaim<string>,IdentityUserToken<string>>
     {
         public EmsContext(DbContextOptions<EmsContext> options) : base(options)
         {
@@ -17,6 +19,12 @@ namespace DAL.Context
 
 
         //Db Sets
+        #region Identity
+        public DbSet<SystemClaim> SystemClaims { get; set; }
+        public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
+
+        #endregion
+
         #region  RealTime   
         public DbSet<Energy> Energies { get; set; }
         #endregion
@@ -48,6 +56,16 @@ namespace DAL.Context
             modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_TransformerHourlyAnalysis", schema: "Calculated");
             modelBuilder.Entity<TransformerHourlyAnalysis>().HasNoKey();
             modelBuilder.Entity<TransformerAnalysis>().HasNoKey();
+            modelBuilder.Entity<ApplicationUserRole>()
+                .HasKey(x => new { x.UserId, x.RoleId });
+            modelBuilder.Entity<ApplicationUserRole>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.UserRoles)
+                .HasForeignKey(x => x.UserId);
+            modelBuilder.Entity<ApplicationUserRole>()
+                .HasOne(x => x.Role)
+                .WithMany(x => x.UserRoles)
+                .HasForeignKey(x => x.RoleId);
         }
 
     }

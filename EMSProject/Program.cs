@@ -1,22 +1,18 @@
 using BLL.Services.Abstractions;
 using BLL.Services.Implementations;
-using BLL.ExternalServices.EmailManagements;
 using DAL.Context;
-using DAL.Models.Identity;
 using DAL.Repositories.Implementation;
 using DAL.Repositories.Implementation.Definitions;
 using DAL.Repositories.Interface;
 using DAL.Repositories.Interface.Definitions;
-using Microsoft.AspNetCore.Identity;
+using EMS;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-#region Controllers + Swagger
+#region Controllers
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 #endregion
 
@@ -28,31 +24,20 @@ builder.Services.AddDbContext<EmsContext>(options =>
 
 #endregion
 
-#region Identity
+#region Extensions
 
-builder.Services
-    .AddIdentity<ApplicationUser, ApplicationRole>(options =>
-    {
-        options.Password.RequiredLength = 6;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireDigit = true;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-    })
-    .AddEntityFrameworkStores<EmsContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddAuth(builder.Configuration);
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddSwaggerDocumentation();
 
 #endregion
 
 #region Repositories & UnitOfWork
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 builder.Services.AddScoped<IFactoryRepository, FactoryRepository>();
 builder.Services.AddScoped<ILineRepository, LineRepository>();
 builder.Services.AddScoped<ILineTransformerRepository, LineTransformerRepository>();
 builder.Services.AddScoped<ITransformerRepository, TransformerRepository>();
-
 #endregion
 
 #region Services
@@ -65,21 +50,11 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 
 #endregion
 
-#region Email
-
-builder.Services.Configure<SmtpSettings>(
-    builder.Configuration.GetSection("SmtpSettings"));
-
-builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
-
-#endregion
-
 var app = builder.Build();
 
-#region Middleware Pipeline
+#region Middleware
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUIWithDocs();
 
 app.UseAuthentication();
 app.UseAuthorization();

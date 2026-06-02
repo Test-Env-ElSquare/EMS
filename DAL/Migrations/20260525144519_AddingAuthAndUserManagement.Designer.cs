@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(EmsContext))]
-    partial class EmsContextModelSnapshot : ModelSnapshot
+    [Migration("20260525144519_AddingAuthAndUserManagement")]
+    partial class AddingAuthAndUserManagement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,12 +27,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Calculated.Historical.TransformerAnalysis", b =>
                 {
-                    b.Property<decimal>("AvgTHDi")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("AvgTHDv")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<decimal>("Current")
                         .HasColumnType("decimal(18,2)");
 
@@ -67,12 +64,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Calculated.Historical.TransformerHourlyAnalysis", b =>
                 {
-                    b.Property<decimal>("AvgTHDi")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("AvgTHDv")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<decimal>("Current")
                         .HasColumnType("decimal(18,2)");
 
@@ -113,12 +104,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Calculated.Views.VW_TransformerAnalysis", b =>
                 {
-                    b.Property<decimal>("AvgTHDi")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("AvgTHDv")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<decimal>("Current")
                         .HasColumnType("decimal(18,2)");
 
@@ -158,12 +143,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Calculated.Views.VW_TransformerHourlyAnalysis", b =>
                 {
-                    b.Property<decimal>("AvgTHDi")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("AvgTHDv")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<decimal>("Current")
                         .HasColumnType("decimal(18,2)");
 
@@ -224,36 +203,6 @@ namespace DAL.Migrations
                     b.HasIndex("FactoryId");
 
                     b.ToTable("Transformer", "Definitions");
-                });
-
-            modelBuilder.Entity("DAL.Models.Definitions.Zone", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("RatioFromParent")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("TransformerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FactoryId");
-
-                    b.HasIndex("TransformerId");
-
-                    b.ToTable("Zones", "Definitions");
                 });
 
             modelBuilder.Entity("DAL.Models.Identity.ApplicationRole", b =>
@@ -624,23 +573,15 @@ namespace DAL.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("RatioFromParent")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ViewName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ZoneId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FactoryId");
-
-                    b.HasIndex("ZoneId");
 
                     b.ToTable("Lines", "Definitions");
                 });
@@ -786,24 +727,6 @@ namespace DAL.Migrations
                     b.Navigation("factory");
                 });
 
-            modelBuilder.Entity("DAL.Models.Definitions.Zone", b =>
-                {
-                    b.HasOne("Domain.Models.Definitions.Factory", "Factory")
-                        .WithMany("Zones")
-                        .HasForeignKey("FactoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.Definitions.Transformer", "Transformer")
-                        .WithMany("Zones")
-                        .HasForeignKey("TransformerId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Factory");
-
-                    b.Navigation("Transformer");
-                });
-
             modelBuilder.Entity("DAL.Models.Identity.ApplicationUserRole", b =>
                 {
                     b.HasOne("DAL.Models.Identity.ApplicationRole", "Role")
@@ -829,14 +752,7 @@ namespace DAL.Migrations
                         .WithMany("Lines")
                         .HasForeignKey("FactoryId");
 
-                    b.HasOne("DAL.Models.Definitions.Zone", "Zone")
-                        .WithMany("Lines")
-                        .HasForeignKey("ZoneId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("Factory");
-
-                    b.Navigation("Zone");
                 });
 
             modelBuilder.Entity("Domain.Models.Definitions.LineTransformer", b =>
@@ -913,22 +829,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Identity.ApplicationUser", b =>
                 {
-                    b.Navigation("LineTransformers");
-
-                    b.Navigation("Zones");
-                });
-
-            modelBuilder.Entity("DAL.Models.Definitions.Zone", b =>
-                {
-                    b.Navigation("Lines");
                     b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("Domain.Models.Definitions.Factory", b =>
                 {
                     b.Navigation("Lines");
-
-                    b.Navigation("Zones");
                 });
 
             modelBuilder.Entity("Domain.Models.Definitions.Line", b =>

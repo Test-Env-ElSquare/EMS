@@ -1,0 +1,15 @@
+﻿global using BLL.DTOs.Auth;
+global using BLL.ExternalServices.EmailManagements;
+global using BLL.Helpers;
+global using DAL.Context;
+global using DAL.Models.Identity;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.IdentityModel.Tokens;
+global using System.ComponentModel.DataAnnotations;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using System.Text;
+global using System.Text.Json.Serialization;

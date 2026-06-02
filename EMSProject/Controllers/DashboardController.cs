@@ -41,5 +41,74 @@ namespace EMS.Controller
             }
         }
 
+        [HttpGet("GetVoltageGraph")]
+        public async Task<IActionResult> GetVoltageGraph(int factoryId, int duration, DateTime? From, DateTime? To)
+        {
+            try
+            {
+                var result = await _dashboardService.GetVoltageStability(factoryId, duration, From, To);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("GetCurrentGraph")]
+        public async Task<IActionResult> GetCurrentGraph(int factoryId, int duration, DateTime? From, DateTime? To)
+        {
+            try
+            {
+                var result = await _dashboardService.GetCurrentFluctuation(factoryId, duration, From, To);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("GetHarmonicsGraph")]
+        public async Task<IActionResult> GetHarmonicsGraph(int factoryId, int duration, DateTime? From, DateTime? To)
+        {
+            try
+            {
+                var result = await _dashboardService.GetHarmonicsLevel(factoryId, duration, From, To);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("GetTransformerSummary")]
+        public async Task<IActionResult> GetTransformerSummary(int factoryId, int duration, DateTime? From, DateTime? To)
+        {
+            try
+            {
+                var result = await _dashboardService.GetTransformerSummary(factoryId, duration, From, To);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("GetTopEnergyConsumers")]
+        public async Task<IActionResult> GetTopEnergyConsumers(int factoryId, int duration, DateTime? From, DateTime? To, int top = 10)
+        {
+            try
+            {
+                var result = await _dashboardService.GetTopEnergyConsumers(factoryId, duration, From, To, top);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

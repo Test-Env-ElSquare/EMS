@@ -1,4 +1,5 @@
 ﻿using DAL.Models;
+using DAL.Models.Definitions;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -13,6 +14,13 @@ namespace Domain.Models.Definitions
         public Factory? Factory { get; set; }
         public string? Type { get; set; }
         public int? FactoryId { get; set; }
+
+        public int? ZoneId { get; set; }
+        public decimal? RatioFromParent { get; set; }
+
+
+        [JsonIgnore]
+        public Zone? Zone { get; set; }
         [JsonIgnore]
         public ICollection<Machine>? Lines { get; set; }
         public string Area { get; set; }

@@ -1,4 +1,5 @@
 ﻿using DAL.Models;
+using DAL.Models.Definitions;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 namespace Domain.Models.Definitions
@@ -10,5 +11,8 @@ namespace Domain.Models.Definitions
         public string Location { get; set; }
         [JsonIgnore]
         public ICollection<Line>? Lines { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Zone>? Zones { get; set; }
     }
 }

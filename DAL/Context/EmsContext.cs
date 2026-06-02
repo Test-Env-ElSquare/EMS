@@ -1,6 +1,7 @@
 ﻿using DAL.Models.Auth;
 using DAL.Models.Calculated.Historical;
 using DAL.Models.Calculated.Views;
+using DAL.Models.Configurations;
 using DAL.Models.Definitions;
 using DAL.Models.RealTime;
 using Domain.Models.Definitions;
@@ -19,13 +20,18 @@ namespace DAL.Context
         //Db Sets
         #region  RealTime   
         public DbSet<Energy> Energies { get; set; }
+        public DbSet<Signal> Signals { get; set; }
+        public DbSet<MachineLoad> MachineLoads { get; set; }
         #endregion
         #region  Definitions   
         public DbSet<Transformer> Transformers { get; set; }
+        public DbSet<Zone> Zones { get; set; }
         public DbSet<LineTransformer> LineTransformers { get; set; }
         public DbSet<Line> Lines { get; set; }
         public DbSet<Factory> Factories { get; set; }
         public DbSet<Machine> Machines { get; set; }
+        public DbSet<MachineShift> MachineShifts { get; set; }
+        public DbSet<SKU> SKUs { get; set; }
         #endregion
         #region  Calculated   
 
@@ -41,6 +47,9 @@ namespace DAL.Context
         {
             base.OnModelCreating(modelBuilder);
             // modelBuilder.ApplyConfiguration(new LineTransfornerConfigurations());
+            modelBuilder.ApplyConfiguration(new ZoneConfiguration());
+            modelBuilder.ApplyConfiguration(new LineConfiguration());
+
 
             // any Views
 

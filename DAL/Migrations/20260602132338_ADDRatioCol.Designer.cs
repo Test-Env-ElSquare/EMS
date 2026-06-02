@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(EmsContext))]
-    partial class EmsContextModelSnapshot : ModelSnapshot
+    [Migration("20260602132338_ADDRatioCol")]
+    partial class ADDRatioCol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -336,14 +339,9 @@ namespace DAL.Migrations
                     b.Property<decimal?>("RatioFromParent")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("TransformerId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FactoryId");
-
-                    b.HasIndex("TransformerId");
 
                     b.ToTable("Zones", "Definitions");
                 });
@@ -722,14 +720,7 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Definitions.Transformer", "Transformer")
-                        .WithMany("Zones")
-                        .HasForeignKey("TransformerId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("Factory");
-
-                    b.Navigation("Transformer");
                 });
 
             modelBuilder.Entity("Domain.Models.Definitions.Line", b =>
@@ -828,8 +819,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Models.Definitions.Transformer", b =>
                 {
                     b.Navigation("LineTransformers");
-
-                    b.Navigation("Zones");
                 });
 
             modelBuilder.Entity("DAL.Models.Definitions.Zone", b =>

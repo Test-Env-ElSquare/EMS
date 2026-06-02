@@ -13,5 +13,8 @@ namespace DAL.Models.Definitions
         public int? FactoryId { set; get; }
         [JsonIgnore]
         public Factory? factory { get; set; }
+        [JsonIgnore]
+        public ICollection<Zone>? Zones { get; set; }
+
     }
 }

@@ -79,5 +79,213 @@ namespace DAL.Repositories.Implementation
                     .ToListAsync();
             }
         }
+
+
+        public async Task<List<VoltageStabilityDto>> GetVoltageStability(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
+        {
+            //if (isCurrentShift)
+            //{
+            //    return await _emsContext.VW_TransformerHourlyAnalysis
+            //        .Where(x => x.HourStartTime >= startTime && x.HourStartTime <= endTime && x.FactoryId == factoryId && x.Status == "Online")
+            //        .GroupBy(x => new { x.FactoryId, x.HourStartTime })
+            //        .Select(g => new VoltageStabilityDto
+            //        {
+            //            FactoryId = g.Key.FactoryId,
+            //            HourStartTime = g.Key.HourStartTime,
+            //            AvgVoltage = g.Average(x => x.Voltage)
+            //        })
+            //        .OrderBy(x => x.HourStartTime)
+            //        .ToListAsync();
+            //}
+            if (isCurrentShift)
+            {
+                return await _emsContext.VW_TransformerHourlyAnalysis
+                    .Where(x =>
+                              x.FactoryId == factoryId
+                             && x.Status == "Online")
+                    .GroupBy(x => new { x.FactoryId, x.HourStartTime })
+                    .Select(g => new VoltageStabilityDto
+                    {
+                        FactoryId = g.Key.FactoryId,
+                        HourStartTime = g.Key.HourStartTime,
+                        AvgVoltage = g.Average(x => x.Voltage)
+                    })
+                    .OrderBy(x => x.HourStartTime)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _emsContext.TransformerHourlyAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime && x.FactoryId == factoryId && x.Status == "Online")
+                    .GroupBy(x => new { x.FactoryId, x.HourStartTime })
+                    .Select(g => new VoltageStabilityDto
+                    {
+                        FactoryId = g.Key.FactoryId,
+                        HourStartTime = g.Key.HourStartTime,
+                        AvgVoltage = g.Average(x => x.Voltage)
+                    })
+                    .OrderBy(x => x.HourStartTime)
+                    .ToListAsync();
+            }
+        }
+
+        public async Task<List<CurrentFluctuationDto>> GetCurrentFluctuation(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
+        {
+            if (isCurrentShift)
+            {
+                return await _emsContext.VW_TransformerHourlyAnalysis
+                    .Where(x => x.FactoryId == factoryId && x.Status == "Online")
+                    .GroupBy(x => new { x.FactoryId, x.HourStartTime })
+                    .Select(g => new CurrentFluctuationDto
+                    {
+                        FactoryId = g.Key.FactoryId,
+                        HourStartTime = g.Key.HourStartTime,
+                        AvgCurrent = g.Average(x => x.Current)
+                    })
+                    .OrderBy(x => x.HourStartTime)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _emsContext.TransformerHourlyAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime && x.FactoryId == factoryId && x.Status == "Online")
+                    .GroupBy(x => new { x.FactoryId, x.HourStartTime })
+                    .Select(g => new CurrentFluctuationDto
+                    {
+                        FactoryId = g.Key.FactoryId,
+                        HourStartTime = g.Key.HourStartTime,
+                        AvgCurrent = g.Average(x => x.Current)
+                    })
+                    .OrderBy(x => x.HourStartTime)
+                    .ToListAsync();
+            }
+        }
+
+        public async Task<List<HarmonicsLevelDto>> GetHarmonicsLevel(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
+        {
+            if (isCurrentShift)
+            {
+                return await _emsContext.VW_TransformerHourlyAnalysis
+                    .Where(x => x.HourStartTime >= startTime && x.HourStartTime <= endTime && x.FactoryId == factoryId)
+                    .GroupBy(x => new { x.FactoryId, x.HourStartTime })
+                    .Select(g => new HarmonicsLevelDto
+                    {
+                        FactoryId = g.Key.FactoryId,
+                        HourStartTime = g.Key.HourStartTime,
+                        AvgTHDv = g.Average(x => x.AvgTHDv),
+                        AvgTHDi = g.Average(x => x.AvgTHDi)
+                    })
+                    .OrderBy(x => x.HourStartTime)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _emsContext.TransformerHourlyAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime && x.FactoryId == factoryId)
+                    .GroupBy(x => new { x.FactoryId, x.HourStartTime })
+                    .Select(g => new HarmonicsLevelDto
+                    {
+                        FactoryId = g.Key.FactoryId,
+                        HourStartTime = g.Key.HourStartTime,
+                        AvgTHDv = g.Average(x => x.AvgTHDv),
+                        AvgTHDi = g.Average(x => x.AvgTHDi)
+                    })
+                    .OrderBy(x => x.HourStartTime)
+                    .ToListAsync();
+            }
+        }
+
+
+        public async Task<TransformerSummaryDto> GetTransformerSummary(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
+        {
+            int totalTransformers = await _emsContext.Transformers
+                .Where(x => x.FactoryId == factoryId)
+                .CountAsync();
+
+            if (isCurrentShift)
+            {
+                var data = await _emsContext.VW_TransformerAnalysis
+                    .Where(x => x.FactoryId == factoryId)
+                    .ToListAsync();
+
+                return new TransformerSummaryDto
+                {
+                    TotalEnergy = data.Sum(x => x.TotalEnergyConsumption),
+                    TotalTransformers = totalTransformers,
+                    OnlineTransformers = data.Count(x => x.Status == "Online"),
+                    OfflineTransformers = data.Count(x => x.Status == "Offline"),
+                    AvgPowerFactor = data.Any(x => x.Status == "Online")
+                        ? data.Where(x => x.Status == "Online").Average(x => x.PowerFactor)
+                        : 0
+                };
+            }
+            else
+            {
+                var data = await _emsContext.TransformerAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime && x.FactoryId == factoryId)
+                    .ToListAsync();
+
+                return new TransformerSummaryDto
+                {
+                    TotalEnergy = data.Sum(x => x.TotalEnergyConsumption),
+                    TotalTransformers = totalTransformers,
+                    OnlineTransformers = data.Count(x => x.Status == "Online"),
+                    OfflineTransformers = data.Count(x => x.Status == "Offline"),
+                    AvgPowerFactor = data.Any(x => x.Status == "Online")
+                        ? data.Where(x => x.Status == "Online").Average(x => x.PowerFactor)
+                        : 0
+                };
+            }
+        }
+
+
+        public async Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift, int top)
+        {
+            List<TransformerEnergyDto> data;
+
+            if (isCurrentShift)
+            {
+                data = await _emsContext.VW_TransformerAnalysis
+                    .Where(x => x.FactoryId == factoryId)
+                    .GroupBy(x => new { x.TransformerId, x.TransformerName })
+                    .Select(g => new TransformerEnergyDto
+                    {
+                        TransformerId = g.Key.TransformerId,
+                        TransformerName = g.Key.TransformerName,
+                        TotalEnergyConsumption = g.Sum(x => x.TotalEnergyConsumption)
+                    })
+                    .ToListAsync();
+            }
+            else
+            {
+                data = await _emsContext.TransformerAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime && x.FactoryId == factoryId)
+                    .GroupBy(x => new { x.TransformerId, x.TransformerName })
+                    .Select(g => new TransformerEnergyDto
+                    {
+                        TransformerId = g.Key.TransformerId,
+                        TransformerName = g.Key.TransformerName,
+                        TotalEnergyConsumption = g.Sum(x => x.TotalEnergyConsumption)
+                    })
+                    .ToListAsync();
+            }
+
+            decimal totalEnergy = data.Sum(x => x.TotalEnergyConsumption);
+
+            return data
+                .OrderByDescending(x => x.TotalEnergyConsumption)
+                .Take(top)
+                .Select((x, index) => new TopEnergyConsumerDto
+                {
+                    Rank = index + 1,
+                    TransformerId = x.TransformerId,
+                    TransformerName = x.TransformerName,
+                    TotalEnergyConsumption = x.TotalEnergyConsumption,
+                    PercentageOfTotal = totalEnergy > 0
+                        ? Math.Round(x.TotalEnergyConsumption / totalEnergy * 100, 0)
+                        : 0
+                })
+                .ToList();
+        }
     }
 }

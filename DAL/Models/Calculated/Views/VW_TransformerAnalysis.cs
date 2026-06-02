@@ -12,6 +12,8 @@
         public decimal Voltage { get; set; }
         public decimal Current { get; set; }
         public decimal Hermonics { get; set; }
+        public decimal AvgTHDv { get; set; }
+        public decimal AvgTHDi { get; set; }
 
     }
 }

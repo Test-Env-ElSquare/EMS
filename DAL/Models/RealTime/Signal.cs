@@ -19,7 +19,7 @@ namespace DAL.Models.RealTime
         public int QrejectDiff { get; set; }
         public DateTime TimeStamp { get; set; }
         public DateTime ShiftStartTime { get; set; }
-        public Machine Machine { get; set; }
+        public Machine? Machine { get; set; }
         public int? MachineId { get; set; }
         public int? FactoryId { get; set; }
         public int? LineId { get; set; }

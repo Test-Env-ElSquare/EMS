@@ -19,6 +19,9 @@ namespace DAL.Models.Definitions
         public ICollection<Line>? Lines { get; set; }
         [JsonIgnore]
         public Transformer? Transformer { get; set; }  // ✅ موجودة؟
+        [Column(TypeName = "decimal(18,4)")]
+
         public decimal? RatioFromParent { get; set; }
+
     }
 }

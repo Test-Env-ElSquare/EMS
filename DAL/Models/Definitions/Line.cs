@@ -1,5 +1,4 @@
-﻿using DAL.Models;
-using DAL.Models.Definitions;
+﻿using DAL.Models.Definitions;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -15,8 +14,13 @@ namespace Domain.Models.Definitions
         public string? Type { get; set; }
         public int? FactoryId { get; set; }
 
+
         public int? ZoneId { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+
         public decimal? RatioFromParent { get; set; }
+
+
 
 
         [JsonIgnore]

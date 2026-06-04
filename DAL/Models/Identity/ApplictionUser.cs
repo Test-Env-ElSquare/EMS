@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace DAL.Models.Identity
+﻿namespace DAL.Models.Identity
 {
 
     public class ApplicationUser : IdentityUser
@@ -11,6 +9,7 @@ namespace DAL.Models.Identity
         public bool IsDeleted { get; set; }
         public bool ReceiveEmail { get; set; } = true;
         public ICollection<ApplicationUserRole> UserRoles { get; set; } = new List<ApplicationUserRole>();
+
 
     }
 

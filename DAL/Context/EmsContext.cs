@@ -1,18 +1,16 @@
-﻿using DAL.Models.Identity;
-using DAL.Models.Calculated.Historical;
+﻿using DAL.Models.Calculated.Historical;
 using DAL.Models.Calculated.Views;
 using DAL.Models.Configurations;
 using DAL.Models.Definitions;
 using DAL.Models.RealTime;
+using DAL.Models.Threshold;
 using Domain.Models.Definitions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Context
 {
     public class EmsContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
-    ApplicationUserRole,IdentityUserLogin<string>,IdentityRoleClaim<string>,IdentityUserToken<string>>
+    ApplicationUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public EmsContext(DbContextOptions<EmsContext> options) : base(options)
         {
@@ -20,6 +18,9 @@ namespace DAL.Context
 
 
         //Db Sets
+        #region Threshold
+        public DbSet<EnergyHeatmapThreshold> EnergyHeatmapThresholds { get; set; }
+        #endregion
         #region Identity
         public DbSet<SystemClaim> SystemClaims { get; set; }
         public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }

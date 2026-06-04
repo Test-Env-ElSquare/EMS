@@ -47,6 +47,8 @@ builder.Services.AddScoped<IDashboradRepository, DashboardRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IEnergyDashboardService, EnergyDashboardService>();
+builder.Services.AddScoped<IEnergyDashboardRepository, EnergyDashboardRepository>();
 
 #endregion
 

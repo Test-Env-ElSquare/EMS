@@ -1,17 +1,26 @@
-﻿namespace Shared.Dtos.Heatmap
+﻿using Shared.Enum;
+
+namespace Shared.Dtos.Heatmap
 {
     public class EnergyHeatmapDto
     {
         public DateTime Date { get; set; }
 
-        public int ItemId { get; set; }
-
-        public string ItemName { get; set; } = string.Empty;
+        public string PeriodType { get; set; } = string.Empty;
 
         public string Level { get; set; } = string.Empty;
 
+        public int? TransformerId { get; set; }
+        public string? TransformerName { get; set; }
+
+        public int? ZoneId { get; set; }
+        public string? ZoneName { get; set; }
+
+        public int? LineId { get; set; }
+        public string? LineName { get; set; }
+
         public decimal Energy { get; set; }
 
-        public string Status { get; set; } = string.Empty;
+        public EnergyStatus Status { get; set; }
     }
 }

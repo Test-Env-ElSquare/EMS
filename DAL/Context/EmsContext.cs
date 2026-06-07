@@ -44,11 +44,23 @@ namespace DAL.Context
         #endregion
         #region  Calculated   
 
+        //Transformers
         public DbSet<VW_TransformerAnalysis> VW_TransformerAnalysis { get; set; }
         public DbSet<VW_TransformerHourlyAnalysis> VW_TransformerHourlyAnalysis { get; set; }
         public DbSet<TransformerAnalysis> TransformerAnalysis { get; set; }
         public DbSet<TransformerHourlyAnalysis> TransformerHourlyAnalysis { get; set; }
 
+        //Zones
+        public DbSet<VW_ZoneAnalysis> VW_ZoneAnalysis { get; set; }
+        public DbSet<VW_ZoneHourlyAnalysis> VW_ZoneHourlyAnalysis { get; set; }
+        public DbSet<ZoneAnalysis> ZoneAnalysis { get; set; }
+        public DbSet<ZoneHourlyAnalysis> ZoneHourlyAnalysis { get; set; }
+
+        //Lines
+        public DbSet<VW_LineAnalysis> VW_LineAnalysis { get; set; }
+        public DbSet<VW_LineHourlyAnalysis> VW_LineHourlyAnalysis { get; set; }
+        public DbSet<LineAnalysis> LineAnalysis { get; set; }
+        public DbSet<LineHourlyAnalysis> LineHourlyAnalysis { get; set; }
 
         #endregion
 
@@ -64,8 +76,23 @@ namespace DAL.Context
 
             modelBuilder.Entity<VW_TransformerAnalysis>().HasNoKey().ToView("VW_TransformerAnalysis", schema: "Calculated");
             modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_TransformerHourlyAnalysis", schema: "Calculated");
+
+            modelBuilder.Entity<VW_TransformerAnalysis>().HasNoKey().ToView("VW_ZoneAnalysis", schema: "Calculated");
+            modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_ZoneHourlyAnalysis", schema: "Calculated");
+
+            modelBuilder.Entity<VW_TransformerAnalysis>().HasNoKey().ToView("VW_LineAnalysis", schema: "Calculated");
+            modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_LineHourlyAnalysis", schema: "Calculated");
+
+
             modelBuilder.Entity<TransformerHourlyAnalysis>().HasNoKey();
             modelBuilder.Entity<TransformerAnalysis>().HasNoKey();
+
+            modelBuilder.Entity<ZoneHourlyAnalysis>().HasNoKey();
+            modelBuilder.Entity<ZoneAnalysis>().HasNoKey();
+
+            modelBuilder.Entity<LineHourlyAnalysis>().HasNoKey();
+            modelBuilder.Entity<LineAnalysis>().HasNoKey();
+
             modelBuilder.Entity<ApplicationUserRole>()
                 .HasKey(x => new { x.UserId, x.RoleId });
             modelBuilder.Entity<ApplicationUserRole>()

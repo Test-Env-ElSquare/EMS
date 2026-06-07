@@ -1303,42 +1303,141 @@ namespace DAL.Repositories.Implementation
 
         #region Summary
 
-        public async Task<DashboardSummaryDto> GetSummary(
-            int? factoryId,
-            DateTime startTime,
-            DateTime endTime,
-            bool isCurrentShift)
+
+        public async Task<TransformerSummaryDto> GetSummary(int? factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
         {
-            var factoryIds = await GetFactoryIds(factoryId);
+            // TotalCount from Definitions (always fast)
+            var totalTransformers = await _emsContext.Transformers
+                .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+                .CountAsync();
 
-            var transformerSummary = await GetTransformersSummary(
-                factoryIds,
-                startTime,
-                endTime,
-                isCurrentShift);
+            var totalZones = await _emsContext.Zones
+                .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+                .CountAsync();
 
-            var lineSummary = await GetLinesSummary(factoryIds);
-            var zoneSummary = await GetZonesSummary(factoryIds);
+            var totalLines = await _emsContext.Lines
+                .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+                .CountAsync();
 
-            return new DashboardSummaryDto
+            if (isCurrentShift)
             {
-                Level = factoryId.HasValue && factoryId.Value > 0 ? "Factory" : "Main",
+                var transformerData = await _emsContext.VW_TransformerAnalysis
+                    .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+                    .ToListAsync();
 
-                TotalEnergy = transformerSummary.TotalEnergy,
-                AvgPowerFactor = transformerSummary.AvgPowerFactor,
+                var onlineTransformers = transformerData.Where(x => x.Status == "Online").ToList();
 
-                Transformers = new CountStatusDto
+                return new TransformerSummaryDto
                 {
-                    TotalCount = transformerSummary.TotalCount,
-                    OnlineCount = transformerSummary.OnlineCount,
-                    OfflineCount = transformerSummary.OfflineCount
-                },
+                    TotalEnergy = transformerData.Sum(x => x.TotalEnergyConsumption),
+                    Transformers = new EntityCountDto { TotalCount = totalTransformers },
+                    Zones = new EntityCountDto { TotalCount = totalZones },
+                    Lines = new EntityCountDto { TotalCount = totalLines },
+                    AvgPowerFactor = onlineTransformers.Any()
+                        ? onlineTransformers.Average(x => x.PowerFactor)
+                        : 0
+                };
+            }
+            else
+            {
+                var transformerData = await _emsContext.TransformerAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime
+                        && (!factoryId.HasValue || x.FactoryId == factoryId))
+                    .ToListAsync();
 
-                Lines = lineSummary,
-                Zones = zoneSummary
-            };
+                var onlineTransformers = transformerData.Where(x => x.Status == "Online").ToList();
+
+                return new TransformerSummaryDto
+                {
+                    TotalEnergy = transformerData.Sum(x => x.TotalEnergyConsumption),
+                    Transformers = new EntityCountDto { TotalCount = totalTransformers },
+                    Zones = new EntityCountDto { TotalCount = totalZones },
+                    Lines = new EntityCountDto { TotalCount = totalLines },
+                    AvgPowerFactor = onlineTransformers.Any()
+                        ? onlineTransformers.Average(x => x.PowerFactor)
+                        : 0
+                };
+            }
         }
 
+        public async Task<OnlineStatusDto> GetOnlineStatus(int? factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
+        {
+            if (isCurrentShift)
+            {
+                var transformerData = await _emsContext.VW_TransformerAnalysis
+                    .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+                    .Select(x => x.Status)
+                    .ToListAsync();
+
+                var zoneData = await _emsContext.VW_ZoneAnalysis
+                    .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+                    .Select(x => x.Status)
+                    .ToListAsync();
+
+                var lineData = await _emsContext.VW_LineAnalysis
+                    .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+                    .Select(x => x.Status)
+                    .ToListAsync();
+
+                return new OnlineStatusDto
+                {
+                    Transformers = new EntityStatusDto
+                    {
+                        OnlineCount = transformerData.Count(x => x == "Online"),
+                        OfflineCount = transformerData.Count(x => x == "Offline")
+                    },
+                    Zones = new EntityStatusDto
+                    {
+                        OnlineCount = zoneData.Count(x => x == "Online"),
+                        OfflineCount = zoneData.Count(x => x == "Offline")
+                    },
+                    Lines = new EntityStatusDto
+                    {
+                        OnlineCount = lineData.Count(x => x == "Online"),
+                        OfflineCount = lineData.Count(x => x == "Offline")
+                    }
+                };
+            }
+            else
+            {
+                var transformerData = await _emsContext.TransformerAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime
+                        && (!factoryId.HasValue || x.FactoryId == factoryId))
+                    .Select(x => x.Status)
+                    .ToListAsync();
+
+                var zoneData = await _emsContext.ZoneAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime
+                        && (!factoryId.HasValue || x.FactoryId == factoryId))
+                    .Select(x => x.Status)
+                    .ToListAsync();
+
+                var lineData = await _emsContext.LineAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime
+                        && (!factoryId.HasValue || x.FactoryId == factoryId))
+                    .Select(x => x.Status)
+                    .ToListAsync();
+
+                return new OnlineStatusDto
+                {
+                    Transformers = new EntityStatusDto
+                    {
+                        OnlineCount = transformerData.Count(x => x == "Online"),
+                        OfflineCount = transformerData.Count(x => x == "Offline")
+                    },
+                    Zones = new EntityStatusDto
+                    {
+                        OnlineCount = zoneData.Count(x => x == "Online"),
+                        OfflineCount = zoneData.Count(x => x == "Offline")
+                    },
+                    Lines = new EntityStatusDto
+                    {
+                        OnlineCount = lineData.Count(x => x == "Online"),
+                        OfflineCount = lineData.Count(x => x == "Offline")
+                    }
+                };
+            }
+        }
         #endregion
 
         #region Graphs

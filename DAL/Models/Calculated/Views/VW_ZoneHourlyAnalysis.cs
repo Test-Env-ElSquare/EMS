@@ -4,6 +4,8 @@
     {
         public int ZoneId { get; set; }
         public string ZoneName { get; set; }
+        public int FactoryId { get; set; }
+
         public int? TransformerId { get; set; }
         public DateTime ShiftStartTime { get; set; }
         public DateTime HourStartTime { get; set; }

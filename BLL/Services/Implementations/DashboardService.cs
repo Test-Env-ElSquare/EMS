@@ -82,16 +82,29 @@ namespace BLL.Services.Implementations
 
             return await _dashboradRepository.GetHarmonicsLevel(factoryId, durationDto.fromTime, durationDto.toTime, isCurrentShift);
         }
-        public async Task<TransformerSummaryDto> GetTransformerSummary(int factoryId, int duration, DateTime? from, DateTime? to)
-        {
-            if (duration == 5)
-                throw new NotImplementedException("Duration 5 not implemented yet.");
+        //public async Task<TransformerSummaryDto> GetTransformerSummary(int factoryId, int duration, DateTime? from, DateTime? to)
+        //{
+        //    if (duration == 5)
+        //        throw new NotImplementedException("Duration 5 not implemented yet.");
 
-            var durationDto = TimeUtilities.GetDurationStartTime(duration, from, to);
-            bool isCurrentShift = duration == 0;
+        //    var durationDto = TimeUtilities.GetDurationStartTime(duration, from, to);
+        //    bool isCurrentShift = duration == 0;
 
-            return await _dashboradRepository.GetTransformerSummary(factoryId, durationDto.fromTime, durationDto.toTime, isCurrentShift);
-        }
+        //    return await _dashboradRepository.GetTransformerSummary(factoryId, durationDto.fromTime, durationDto.toTime, isCurrentShift);
+        //}
+        //public async Task<TransformerSummaryDto> GetTransformerSummary(int? factoryId, int duration, DateTime? from, DateTime? to)
+        //{
+        //    if (duration == 5)
+        //        throw new NotImplementedException("Duration 5 not implemented yet.");
+
+        //    var durationDto = TimeUtilities.GetDurationStartTime(duration, from, to);
+        //    bool isCurrentShift = duration == 0;
+        //    string level = factoryId.HasValue ? "Factory" : "Main";
+
+        //    var result = await _dashboradRepository.GetTransformerSummary(factoryId, durationDto.fromTime, durationDto.toTime, isCurrentShift);
+        //    result.Level = level;
+        //    return result;
+        //}
 
     }
 }

@@ -242,48 +242,143 @@ namespace DAL.Repositories.Implementation
         }
 
 
-        public async Task<TransformerSummaryDto> GetTransformerSummary(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
-        {
-            int totalTransformers = await _emsContext.Transformers
-                .Where(x => x.FactoryId == factoryId)
-                .CountAsync();
+        //public async Task<TransformerSummaryDto> GetTransformerSummary(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
+        //{
+        //    int totalTransformers = await _emsContext.Transformers
+        //        .Where(x => x.FactoryId == factoryId)
+        //        .CountAsync();
 
-            if (isCurrentShift)
-            {
-                var data = await _emsContext.VW_TransformerAnalysis
-                    .Where(x => x.FactoryId == factoryId)
-                    .ToListAsync();
+        //    if (isCurrentShift)
+        //    {
+        //        var data = await _emsContext.VW_TransformerAnalysis
+        //            .Where(x => x.FactoryId == factoryId)
+        //            .ToListAsync();
 
-                return new TransformerSummaryDto
-                {
-                    TotalEnergy = data.Sum(x => x.TotalEnergyConsumption),
-                    TotalTransformers = totalTransformers,
-                    OnlineTransformers = data.Count(x => x.Status == "Online"),
-                    OfflineTransformers = data.Count(x => x.Status == "Offline"),
-                    AvgPowerFactor = data.Any(x => x.Status == "Online")
-                        ? data.Where(x => x.Status == "Online").Average(x => x.PowerFactor)
-                        : 0
-                };
-            }
-            else
-            {
-                var data = await _emsContext.TransformerAnalysis
-                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime && x.FactoryId == factoryId)
-                    .ToListAsync();
+        //        return new TransformerSummaryDto
+        //        {
+        //            TotalEnergy = data.Sum(x => x.TotalEnergyConsumption),
+        //            TotalTransformers = totalTransformers,
+        //            OnlineTransformers = data.Count(x => x.Status == "Online"),
+        //            OfflineTransformers = data.Count(x => x.Status == "Offline"),
+        //            AvgPowerFactor = data.Any(x => x.Status == "Online")
+        //                ? data.Where(x => x.Status == "Online").Average(x => x.PowerFactor)
+        //                : 0
+        //        };
+        //    }
+        //    else
+        //    {
+        //        var data = await _emsContext.TransformerAnalysis
+        //            .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime && x.FactoryId == factoryId)
+        //            .ToListAsync();
 
-                return new TransformerSummaryDto
-                {
-                    TotalEnergy = data.Sum(x => x.TotalEnergyConsumption),
-                    TotalTransformers = totalTransformers,
-                    OnlineTransformers = data.Count(x => x.Status == "Online"),
-                    OfflineTransformers = data.Count(x => x.Status == "Offline"),
-                    AvgPowerFactor = data.Any(x => x.Status == "Online")
-                        ? data.Where(x => x.Status == "Online").Average(x => x.PowerFactor)
-                        : 0
-                };
-            }
-        }
+        //        return new TransformerSummaryDto
+        //        {
+        //            TotalEnergy = data.Sum(x => x.TotalEnergyConsumption),
+        //            TotalTransformers = totalTransformers,
+        //            OnlineTransformers = data.Count(x => x.Status == "Online"),
+        //            OfflineTransformers = data.Count(x => x.Status == "Offline"),
+        //            AvgPowerFactor = data.Any(x => x.Status == "Online")
+        //                ? data.Where(x => x.Status == "Online").Average(x => x.PowerFactor)
+        //                : 0
+        //        };
+        //    }
+        //}
+        //public async Task<TransformerSummaryDto> GetTransformerSummary(int? factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
+        //{
+        //    if (isCurrentShift)
+        //    {
+        //        // Transformers
+        //        var transformerData = await _emsContext.VW_TransformerAnalysis
+        //            .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+        //            .ToListAsync();
 
+        //        // Zones
+        //        var zoneData = await _emsContext.VW_ZoneAnalysis
+        //            .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+        //            .ToListAsync();
+
+        //        // Lines
+        //        var lineData = await _emsContext.VW_LineAnalysis
+        //            .Where(x => !factoryId.HasValue || x.FactoryId == factoryId)
+        //            .ToListAsync();
+
+        //        var onlineTransformers = transformerData.Where(x => x.Status == "Online").ToList();
+
+        //        return new TransformerSummaryDto
+        //        {
+        //            TotalEnergy = transformerData.Sum(x => x.TotalEnergyConsumption),
+        //            Transformers = new EntitySummaryDto
+        //            {
+        //                TotalCount = transformerData.Count,
+        //                OnlineCount = transformerData.Count(x => x.Status == "Online"),
+        //                OfflineCount = transformerData.Count(x => x.Status == "Offline")
+        //            },
+        //            Zones = new EntitySummaryDto
+        //            {
+        //                TotalCount = zoneData.Count,
+        //                OnlineCount = zoneData.Count(x => x.Status == "Online"),
+        //                OfflineCount = zoneData.Count(x => x.Status == "Offline")
+        //            },
+        //            Lines = new EntitySummaryDto
+        //            {
+        //                TotalCount = lineData.Count,
+        //                OnlineCount = lineData.Count(x => x.Status == "Online"),
+        //                OfflineCount = lineData.Count(x => x.Status == "Offline")
+        //            },
+        //            AvgPowerFactor = onlineTransformers.Any()
+        //                ? onlineTransformers.Average(x => x.PowerFactor)
+        //                : 0
+        //        };
+        //    }
+        //    else
+        //    {
+        //        // Transformers
+        //        var transformerData = await _emsContext.TransformerAnalysis
+        //            .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime
+        //                && (!factoryId.HasValue || x.FactoryId == factoryId))
+        //            .ToListAsync();
+
+        //        // Zones
+        //        var zoneData = await _emsContext.ZoneAnalysis
+        //            .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime
+        //                && (!factoryId.HasValue || x.FactoryId == factoryId))
+        //            .ToListAsync();
+
+        //        // Lines
+        //        var lineData = await _emsContext.LineAnalysis
+        //            .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime
+        //                && (!factoryId.HasValue || x.FactoryId == factoryId))
+        //            .ToListAsync();
+
+        //        var onlineTransformers = transformerData.Where(x => x.Status == "Online").ToList();
+
+        //        return new TransformerSummaryDto
+        //        {
+        //            TotalEnergy = transformerData.Sum(x => x.TotalEnergyConsumption),
+        //            Transformers = new EntitySummaryDto
+        //            {
+        //                TotalCount = transformerData.Count,
+        //                OnlineCount = transformerData.Count(x => x.Status == "Online"),
+        //                OfflineCount = transformerData.Count(x => x.Status == "Offline")
+        //            },
+        //            Zones = new EntitySummaryDto
+        //            {
+        //                TotalCount = zoneData.Count,
+        //                OnlineCount = zoneData.Count(x => x.Status == "Online"),
+        //                OfflineCount = zoneData.Count(x => x.Status == "Offline")
+        //            },
+        //            Lines = new EntitySummaryDto
+        //            {
+        //                TotalCount = lineData.Count,
+        //                OnlineCount = lineData.Count(x => x.Status == "Online"),
+        //                OfflineCount = lineData.Count(x => x.Status == "Offline")
+        //            },
+        //            AvgPowerFactor = onlineTransformers.Any()
+        //                ? onlineTransformers.Average(x => x.PowerFactor)
+        //                : 0
+        //        };
+        //    }
+        //}
 
     }
 }

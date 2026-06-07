@@ -83,20 +83,37 @@ namespace EMS.Controller
             }
         }
 
-        [HttpGet("GetTransformerSummary")]
-        public async Task<IActionResult> GetTransformerSummary(int factoryId, int duration, DateTime? From, DateTime? To)
-        {
-            try
-            {
-                var result = await _dashboardService.GetTransformerSummary(factoryId, duration, From, To);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
-        }
+        //[HttpGet("GetTransformerSummary")]
+        //public async Task<IActionResult> GetTransformerSummary(int factoryId, int duration, DateTime? From, DateTime? To)
+        //{
+        //    try
+        //    {
+        //        var result = await _dashboardService.GetTransformerSummary(factoryId, duration, From, To);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new { error = ex.Message });
+        //    }
+        //}
 
+        //    [HttpGet("GetTransformerSummary")]
+        //    public async Task<IActionResult> GetTransformerSummary(
+        //int? factoryId,
+        //int duration = 0,
+        //DateTime? From = null,
+        //DateTime? To = null)
+        //    {
+        //        try
+        //        {
+        //            var result = await _dashboardService.GetTransformerSummary(factoryId, duration, From, To);
+        //            return Ok(result);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return BadRequest(new { error = ex.Message });
+        //        }
+        //    }
         [HttpGet("GetTopEnergyConsumers")]
         public async Task<IActionResult> GetTopEnergyConsumers(int factoryId, int duration, DateTime? From, DateTime? To, int top = 10)
         {

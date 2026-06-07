@@ -7,12 +7,13 @@ namespace BLL.Services.Abstractions
 {
     public interface IEnergyDashboardService
     {
-        Task<DashboardSummaryDto> GetSummary(
-                    int? factoryId,
-                    int duration,
-                    DateTime? from,
-                    DateTime? to);
-
+        //Task<DashboardSummaryDto> GetSummary(
+        //            int? factoryId,
+        //            int duration,
+        //            DateTime? from,
+        //            DateTime? to);
+        Task<TransformerSummaryDto> GetSummary(int? factoryId, int duration, DateTime? from, DateTime? to);
+        Task<OnlineStatusDto> GetOnlineStatus(int? factoryId, int duration, DateTime? from, DateTime? to);
         Task<List<VoltageGraphDto>> GetVoltageGraph(
             int factoryId,
             int duration,

@@ -16,28 +16,31 @@ namespace BLL.Services.Implementations
             _energyDashboardRepo = energyDashboardRepo;
         }
 
-        public async Task<DashboardSummaryDto> GetSummary(
-            int? factoryId,
-            int duration,
-            DateTime? from,
-            DateTime? to)
+
+        public async Task<TransformerSummaryDto> GetSummary(int? factoryId, int duration, DateTime? from, DateTime? to)
         {
             if (duration == 5)
-                throw new NotImplementedException("Custom duration is not implemented yet.");
-
-            ValidateFilters(factoryId, null, null);
-
+                throw new NotImplementedException("Duration 5 not implemented yet.");
             var durationDto = TimeUtilities.GetDurationStartTime(duration, from, to);
-
             bool isCurrentShift = duration == 0;
-
-            return await _energyDashboardRepo.GetSummary(
-                factoryId,
-                durationDto.fromTime,
-                durationDto.toTime,
-                isCurrentShift
-            );
+            string level = factoryId.HasValue ? "Factory" : "Main";
+            var result = await _energyDashboardRepo.GetSummary(factoryId, durationDto.fromTime, durationDto.toTime, isCurrentShift);
+            result.Level = level;
+            return result;
         }
+
+        public async Task<OnlineStatusDto> GetOnlineStatus(int? factoryId, int duration, DateTime? from, DateTime? to)
+        {
+            if (duration == 5)
+                throw new NotImplementedException("Duration 5 not implemented yet.");
+            var durationDto = TimeUtilities.GetDurationStartTime(duration, from, to);
+            bool isCurrentShift = duration == 0;
+            string level = factoryId.HasValue ? "Factory" : "Main";
+            var result = await _energyDashboardRepo.GetOnlineStatus(factoryId, durationDto.fromTime, durationDto.toTime, isCurrentShift);
+            result.Level = level;
+            return result;
+        }
+
 
         private void ValidateFilters(int? factoryId, int? transformerId, int? zoneId)
         {

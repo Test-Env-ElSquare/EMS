@@ -9,12 +9,13 @@ namespace DAL.Repositories.Interface
 {
     public interface IEnergyDashboardRepository
     {
-        Task<DashboardSummaryDto> GetSummary(
-            int? factoryId,
-            DateTime startTime,
-            DateTime endTime,
-            bool isCurrentShift);
-
+        //Task<DashboardSummaryDto> GetSummary(
+        //    int? factoryId,
+        //    DateTime startTime,
+        //    DateTime endTime,
+        //    bool isCurrentShift);
+        Task<TransformerSummaryDto> GetSummary(int? factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift);
+        Task<OnlineStatusDto> GetOnlineStatus(int? factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift);
         Task<List<VoltageGraphDto>> GetVoltageGraph(
             int? factoryId,
             DateTime startTime,

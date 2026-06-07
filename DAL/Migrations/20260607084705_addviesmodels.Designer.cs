@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(EmsContext))]
-    partial class EmsContextModelSnapshot : ModelSnapshot
+    [Migration("20260607084705_addviesmodels")]
+    partial class addviesmodels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +36,6 @@ namespace DAL.Migrations
                     b.Property<decimal>("EnergyConsumption")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("LineId")
                         .HasColumnType("int");
 
@@ -45,10 +45,6 @@ namespace DAL.Migrations
 
                     b.Property<DateTime>("ShiftStartTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ZoneId")
                         .HasColumnType("int");
@@ -66,9 +62,6 @@ namespace DAL.Migrations
 
                     b.Property<decimal>("EnergyConsumption")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("HourStartTime")
                         .HasColumnType("datetime2");
@@ -183,15 +176,8 @@ namespace DAL.Migrations
                     b.Property<decimal>("EnergyConsumption")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ShiftStartTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TransformerId")
                         .HasColumnType("int");
@@ -210,9 +196,6 @@ namespace DAL.Migrations
                 {
                     b.Property<decimal>("EnergyConsumption")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("HourStartTime")
                         .HasColumnType("datetime2");
@@ -244,9 +227,6 @@ namespace DAL.Migrations
                     b.Property<decimal>("EnergyConsumption")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("LineId")
                         .HasColumnType("int");
 
@@ -256,10 +236,6 @@ namespace DAL.Migrations
 
                     b.Property<DateTime>("ShiftStartTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ZoneId")
                         .HasColumnType("int");
@@ -279,9 +255,6 @@ namespace DAL.Migrations
 
                     b.Property<decimal>("EnergyConsumption")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("HourStartTime")
                         .HasColumnType("datetime2");
@@ -402,15 +375,8 @@ namespace DAL.Migrations
                     b.Property<decimal>("EnergyConsumption")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ShiftStartTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TransformerId")
                         .HasColumnType("int");
@@ -431,9 +397,6 @@ namespace DAL.Migrations
                 {
                     b.Property<decimal>("EnergyConsumption")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("HourStartTime")
                         .HasColumnType("datetime2");

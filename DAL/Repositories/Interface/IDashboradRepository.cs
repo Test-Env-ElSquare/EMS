@@ -10,7 +10,7 @@ namespace DAL.Repositories.Interface
         public Task<List<VoltageStabilityDto>> GetVoltageStability(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift);
         public Task<List<CurrentFluctuationDto>> GetCurrentFluctuation(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift);
         public Task<List<HarmonicsLevelDto>> GetHarmonicsLevel(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift);
-        public Task<TransformerSummaryDto> GetTransformerSummary(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift);
+        // public Task<TransformerSummaryDto> GetTransformerSummary(int? factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift);
         public Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift, int top);
 
 

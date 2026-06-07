@@ -77,11 +77,11 @@ namespace DAL.Context
             modelBuilder.Entity<VW_TransformerAnalysis>().HasNoKey().ToView("VW_TransformerAnalysis", schema: "Calculated");
             modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_TransformerHourlyAnalysis", schema: "Calculated");
 
-            modelBuilder.Entity<VW_TransformerAnalysis>().HasNoKey().ToView("VW_ZoneAnalysis", schema: "Calculated");
-            modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_ZoneHourlyAnalysis", schema: "Calculated");
+            modelBuilder.Entity<VW_ZoneAnalysis>().HasNoKey().ToView("VW_ZoneAnalysis", schema: "Calculated");
+            modelBuilder.Entity<VW_ZoneHourlyAnalysis>().HasNoKey().ToView("VW_ZoneHourlyAnalysis", schema: "Calculated");
 
-            modelBuilder.Entity<VW_TransformerAnalysis>().HasNoKey().ToView("VW_LineAnalysis", schema: "Calculated");
-            modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_LineHourlyAnalysis", schema: "Calculated");
+            modelBuilder.Entity<VW_LineAnalysis>().HasNoKey().ToView("VW_LineAnalysis", schema: "Calculated");
+            modelBuilder.Entity<VW_LineHourlyAnalysis>().HasNoKey().ToView("VW_LineHourlyAnalysis", schema: "Calculated");
 
 
             modelBuilder.Entity<TransformerHourlyAnalysis>().HasNoKey();

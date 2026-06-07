@@ -15,20 +15,32 @@ namespace EMS.Controllers
         }
 
         [HttpGet("GetSummary")]
-        public async Task<IActionResult> GetSummary(
-            [FromQuery] int? factoryId = null,
-            [FromQuery] int duration = 0,
-            [FromQuery] DateTime? from = null,
-            [FromQuery] DateTime? to = null)
+        public async Task<IActionResult> GetSummary(int? factoryId, int duration = 0, DateTime? From = null, DateTime? To = null)
         {
-            var result = await _energyDashboardService.GetSummary(
-                factoryId,
-                duration,
-                from,
-                to
-            );
+            try
+            {
+                var result = await _energyDashboardService.GetSummary(factoryId, duration, From, To);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
 
-            return Ok(result);
+
+        [HttpGet("GetOnlineStatus")]
+        public async Task<IActionResult> GetOnlineStatus(int? factoryId, int duration = 0, DateTime? From = null, DateTime? To = null)
+        {
+            try
+            {
+                var result = await _energyDashboardService.GetOnlineStatus(factoryId, duration, From, To);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpGet("GetVoltageGraph")]

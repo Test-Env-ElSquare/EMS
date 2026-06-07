@@ -2,6 +2,8 @@
 {
     public class VW_LineHourlyAnalysis
     {
+        public int FactoryId { get; set; }
+
         public int LineId { get; set; }
         public string LineName { get; set; }
         public int? ZoneId { get; set; }

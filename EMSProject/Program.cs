@@ -59,12 +59,39 @@ builder.Services.AddScoped<IEnergyDashboardRepository, EnergyDashboardRepository
 
 #endregion
 
+#region CORS
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowEmsFrontends", policy =>
+    {
+        policy
+            .SetIsOriginAllowed(origin =>
+            {
+                if (string.IsNullOrWhiteSpace(origin))
+                    return false;
+
+                return origin == "http://localhost:4200"
+                    || origin == "https://localhost:4200"
+                    || origin == "http://127.0.0.1:4200"
+                    || origin == "http://10.1.1.240"
+                    || origin == "http://10.1.1.240:4200";
+            })
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+#endregion
+
 var app = builder.Build();
 
 #region Middleware
 
 app.UseSwaggerUIWithDocs();
 
+app.UseCors("AllowEmsFrontends");
 app.UseAuthentication();
 app.UseAuthorization();
 

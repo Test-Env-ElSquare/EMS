@@ -3,6 +3,7 @@ using DAL.Models.Calculated.Views;
 using DAL.Models.Configurations;
 using DAL.Models.Definitions;
 using DAL.Models.RealTime;
+using DAL.Models.Threshold;
 using Domain.Models.Definitions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -17,6 +18,9 @@ namespace DAL.Context
 
 
         //Db Sets
+        #region Threshold
+        public DbSet<EnergyHeatmapThreshold> EnergyHeatmapThresholds { get; set; }
+        #endregion
         #region Identity
         public DbSet<SystemClaim> SystemClaims { get; set; }
         public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }

@@ -12,7 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Controllers
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DefaultIgnoreCondition =
+            System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
+
 
 #endregion
 
@@ -47,6 +54,8 @@ builder.Services.AddScoped<IDashboradRepository, DashboardRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IEnergyDashboardService, EnergyDashboardService>();
+builder.Services.AddScoped<IEnergyDashboardRepository, EnergyDashboardRepository>();
 
 #endregion
 

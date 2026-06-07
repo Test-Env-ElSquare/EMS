@@ -1,7 +1,5 @@
 ﻿using BLL.Dtos;
-using DAL.Context;
 using DAL.Repositories.Interface;
-using Microsoft.EntityFrameworkCore;
 using Shared.Dtos;
 
 namespace DAL.Repositories.Implementation
@@ -80,6 +78,54 @@ namespace DAL.Repositories.Implementation
             }
         }
 
+        public async Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift, int top)
+        {
+            List<TransformerEnergyDto> data;
+
+            if (isCurrentShift)
+            {
+                data = await _emsContext.VW_TransformerAnalysis
+                    .Where(x => x.FactoryId == factoryId)
+                    .GroupBy(x => new { x.TransformerId, x.TransformerName })
+                    .Select(g => new TransformerEnergyDto
+                    {
+                        TransformerId = g.Key.TransformerId,
+                        TransformerName = g.Key.TransformerName,
+                        TotalEnergyConsumption = g.Sum(x => x.TotalEnergyConsumption)
+                    })
+                    .ToListAsync();
+            }
+            else
+            {
+                data = await _emsContext.TransformerAnalysis
+                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime && x.FactoryId == factoryId)
+                    .GroupBy(x => new { x.TransformerId, x.TransformerName })
+                    .Select(g => new TransformerEnergyDto
+                    {
+                        TransformerId = g.Key.TransformerId,
+                        TransformerName = g.Key.TransformerName,
+                        TotalEnergyConsumption = g.Sum(x => x.TotalEnergyConsumption)
+                    })
+                    .ToListAsync();
+            }
+
+            decimal totalEnergy = data.Sum(x => x.TotalEnergyConsumption);
+
+            return data
+                .OrderByDescending(x => x.TotalEnergyConsumption)
+                .Take(top)
+                .Select((x, index) => new TopEnergyConsumerDto
+                {
+                    Rank = index + 1,
+                    TransformerId = x.TransformerId,
+                    TransformerName = x.TransformerName,
+                    TotalEnergyConsumption = x.TotalEnergyConsumption,
+                    PercentageOfTotal = totalEnergy > 0
+                        ? Math.Round(x.TotalEnergyConsumption / totalEnergy * 100, 0)
+                        : 0
+                })
+                .ToList();
+        }
 
         public async Task<List<VoltageStabilityDto>> GetVoltageStability(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift)
         {
@@ -239,53 +285,5 @@ namespace DAL.Repositories.Implementation
         }
 
 
-        public async Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(int factoryId, DateTime startTime, DateTime endTime, bool isCurrentShift, int top)
-        {
-            List<TransformerEnergyDto> data;
-
-            if (isCurrentShift)
-            {
-                data = await _emsContext.VW_TransformerAnalysis
-                    .Where(x => x.FactoryId == factoryId)
-                    .GroupBy(x => new { x.TransformerId, x.TransformerName })
-                    .Select(g => new TransformerEnergyDto
-                    {
-                        TransformerId = g.Key.TransformerId,
-                        TransformerName = g.Key.TransformerName,
-                        TotalEnergyConsumption = g.Sum(x => x.TotalEnergyConsumption)
-                    })
-                    .ToListAsync();
-            }
-            else
-            {
-                data = await _emsContext.TransformerAnalysis
-                    .Where(x => x.ShiftStartTime >= startTime && x.ShiftStartTime <= endTime && x.FactoryId == factoryId)
-                    .GroupBy(x => new { x.TransformerId, x.TransformerName })
-                    .Select(g => new TransformerEnergyDto
-                    {
-                        TransformerId = g.Key.TransformerId,
-                        TransformerName = g.Key.TransformerName,
-                        TotalEnergyConsumption = g.Sum(x => x.TotalEnergyConsumption)
-                    })
-                    .ToListAsync();
-            }
-
-            decimal totalEnergy = data.Sum(x => x.TotalEnergyConsumption);
-
-            return data
-                .OrderByDescending(x => x.TotalEnergyConsumption)
-                .Take(top)
-                .Select((x, index) => new TopEnergyConsumerDto
-                {
-                    Rank = index + 1,
-                    TransformerId = x.TransformerId,
-                    TransformerName = x.TransformerName,
-                    TotalEnergyConsumption = x.TotalEnergyConsumption,
-                    PercentageOfTotal = totalEnergy > 0
-                        ? Math.Round(x.TotalEnergyConsumption / totalEnergy * 100, 0)
-                        : 0
-                })
-                .ToList();
-        }
     }
 }

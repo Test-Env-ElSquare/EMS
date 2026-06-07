@@ -59,6 +59,21 @@ builder.Services.AddScoped<IEnergyDashboardRepository, EnergyDashboardRepository
 
 #endregion
 
+#region CORS
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+#endregion
+
 var app = builder.Build();
 
 #region Middleware

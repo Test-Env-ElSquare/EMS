@@ -1,18 +1,15 @@
-﻿using DAL.Models.Identity;
-using DAL.Models.Calculated.Historical;
+﻿using DAL.Models.Calculated.Historical;
 using DAL.Models.Calculated.Views;
 using DAL.Models.Configurations;
 using DAL.Models.Definitions;
 using DAL.Models.RealTime;
 using Domain.Models.Definitions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Context
 {
     public class EmsContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
-    ApplicationUserRole,IdentityUserLogin<string>,IdentityRoleClaim<string>,IdentityUserToken<string>>
+    ApplicationUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public EmsContext(DbContextOptions<EmsContext> options) : base(options)
         {
@@ -43,11 +40,23 @@ namespace DAL.Context
         #endregion
         #region  Calculated   
 
+        //Transformers
         public DbSet<VW_TransformerAnalysis> VW_TransformerAnalysis { get; set; }
         public DbSet<VW_TransformerHourlyAnalysis> VW_TransformerHourlyAnalysis { get; set; }
         public DbSet<TransformerAnalysis> TransformerAnalysis { get; set; }
         public DbSet<TransformerHourlyAnalysis> TransformerHourlyAnalysis { get; set; }
 
+        //Zones
+        public DbSet<VW_ZoneAnalysis> VW_ZoneAnalysis { get; set; }
+        public DbSet<VW_ZoneHourlyAnalysis> VW_ZoneHourlyAnalysis { get; set; }
+        public DbSet<ZoneAnalysis> ZoneAnalysis { get; set; }
+        public DbSet<ZoneHourlyAnalysis> ZoneHourlyAnalysis { get; set; }
+
+        //Lines
+        public DbSet<VW_LineAnalysis> VW_LineAnalysis { get; set; }
+        public DbSet<VW_LineHourlyAnalysis> VW_LineHourlyAnalysis { get; set; }
+        public DbSet<LineAnalysis> LineAnalysis { get; set; }
+        public DbSet<LineHourlyAnalysis> LineHourlyAnalysis { get; set; }
 
         #endregion
 
@@ -63,8 +72,23 @@ namespace DAL.Context
 
             modelBuilder.Entity<VW_TransformerAnalysis>().HasNoKey().ToView("VW_TransformerAnalysis", schema: "Calculated");
             modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_TransformerHourlyAnalysis", schema: "Calculated");
+
+            modelBuilder.Entity<VW_TransformerAnalysis>().HasNoKey().ToView("VW_ZoneAnalysis", schema: "Calculated");
+            modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_ZoneHourlyAnalysis", schema: "Calculated");
+
+            modelBuilder.Entity<VW_TransformerAnalysis>().HasNoKey().ToView("VW_LineAnalysis", schema: "Calculated");
+            modelBuilder.Entity<VW_TransformerHourlyAnalysis>().HasNoKey().ToView("VW_LineHourlyAnalysis", schema: "Calculated");
+
+
             modelBuilder.Entity<TransformerHourlyAnalysis>().HasNoKey();
             modelBuilder.Entity<TransformerAnalysis>().HasNoKey();
+
+            modelBuilder.Entity<ZoneHourlyAnalysis>().HasNoKey();
+            modelBuilder.Entity<ZoneAnalysis>().HasNoKey();
+
+            modelBuilder.Entity<LineHourlyAnalysis>().HasNoKey();
+            modelBuilder.Entity<LineAnalysis>().HasNoKey();
+
             modelBuilder.Entity<ApplicationUserRole>()
                 .HasKey(x => new { x.UserId, x.RoleId });
             modelBuilder.Entity<ApplicationUserRole>()

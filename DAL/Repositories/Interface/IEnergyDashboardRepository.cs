@@ -1,7 +1,4 @@
-﻿
-
-using BLL.Dtos;
-using Shared.Dtos;
+﻿using Shared.Dtos;
 using Shared.Dtos.EnergyDashboard;
 using Shared.Dtos.Heatmap;
 
@@ -46,32 +43,59 @@ namespace DAL.Repositories.Interface
            bool isCurrentShift);
 
 
-        Task<List<TransformerEnergyDto>> GetTotalEnergyPerTransformer(
+        //        Task<List<TransformerEnergyDto>> GetTotalEnergyPerTransformer(
+        //    int factoryId,
+        //    int? transformerId,
+        //    int? zoneId,
+        //    DateTime startTime,
+        //    DateTime endTime,
+        //    bool isCurrentShift
+        //);
+
+        //        Task<List<TransformerHourlyEnergyDto>> GetHourlyEnergyPerTransformer(
+        //            int factoryId,
+        //            int? transformerId,
+        //            int? zoneId,
+        //            DateTime startTime,
+        //            DateTime endTime,
+        //            bool isCurrentShift
+        //        );
+
+        //        Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(
+        //            int factoryId,
+        //            int? transformerId,
+        //            int? zoneId,
+        //            DateTime startTime,
+        //            DateTime endTime,
+        //            bool isCurrentShift,
+        //            int top
+        //        );
+
+
+        Task<List<EnergyConsumptionDto>> GetTotalEnergyPerTransformer(
     int factoryId,
     int? transformerId,
     int? zoneId,
     DateTime startTime,
     DateTime endTime,
-    bool isCurrentShift
-);
+    bool isCurrentShift);
 
-        Task<List<TransformerHourlyEnergyDto>> GetHourlyEnergyPerTransformer(
+        Task<List<HourlyEnergyConsumptionDto>> GetHourlyEnergyPerTransformer(
             int factoryId,
             int? transformerId,
             int? zoneId,
             DateTime startTime,
             DateTime endTime,
-            bool isCurrentShift
-        );
+            bool isCurrentShift);
 
-        Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(
+        Task<List<TopEnergyConsumerDtoV1>> GetTopEnergyConsumers(
             int factoryId,
             int? transformerId,
             int? zoneId,
             DateTime startTime,
             DateTime endTime,
             bool isCurrentShift,
-            int top
-        );
+            int top);
+
     }
 }

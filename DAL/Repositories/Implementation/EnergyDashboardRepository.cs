@@ -1565,22 +1565,219 @@ namespace DAL.Repositories.Implementation
 
         #region Energy
 
-        public async Task<List<TransformerEnergyDto>> GetTotalEnergyPerTransformer(
-            int factoryId,
-            int? transformerId,
-            int? zoneId,
-            DateTime startTime,
-            DateTime endTime,
-            bool isCurrentShift)
+        //public async Task<List<TransformerEnergyDto>> GetTotalEnergyPerTransformer(
+        //    int factoryId,
+        //    int? transformerId,
+        //    int? zoneId,
+        //    DateTime startTime,
+        //    DateTime endTime,
+        //    bool isCurrentShift)
+        //{
+        //    // Factory level: return transformers.
+        //    if (!transformerId.HasValue && !zoneId.HasValue)
+        //    {
+        //        return await GetTransformerTotalEnergyList(
+        //            factoryId,
+        //            startTime,
+        //            endTime,
+        //            isCurrentShift);
+        //    }
+
+        //    // Transformer level: return zones.
+        //    if (transformerId.HasValue && !zoneId.HasValue)
+        //    {
+        //        var zones = await GetZonesByTransformer(factoryId, transformerId.Value);
+
+        //        decimal transformerEnergy = await GetTransformerTotalEnergy(
+        //            factoryId,
+        //            transformerId.Value,
+        //            startTime,
+        //            endTime,
+        //            isCurrentShift);
+
+        //        return zones.Select(z => new TransformerEnergyDto
+        //        {
+        //            TransformerId = z.Id,
+        //            TransformerName = z.Name,
+        //            TotalEnergyConsumption = transformerEnergy * z.Ratio
+        //        }).ToList();
+        //    }
+
+        //    // Zone level: return lines.
+        //    if (transformerId.HasValue && zoneId.HasValue)
+        //    {
+        //        decimal zoneRatio = await GetZoneRatio(
+        //            factoryId,
+        //            transformerId.Value,
+        //            zoneId.Value);
+
+        //        var lines = await GetLinesByZone(factoryId, zoneId.Value);
+
+        //        decimal transformerEnergy = await GetTransformerTotalEnergy(
+        //            factoryId,
+        //            transformerId.Value,
+        //            startTime,
+        //            endTime,
+        //            isCurrentShift);
+
+        //        decimal zoneEnergy = transformerEnergy * zoneRatio;
+
+        //        return lines.Select(l => new TransformerEnergyDto
+        //        {
+        //            TransformerId = l.Id,
+        //            TransformerName = l.Name,
+        //            TotalEnergyConsumption = zoneEnergy * l.Ratio
+        //        }).ToList();
+        //    }
+
+        //    throw new Exception("Invalid filters.");
+        //}
+
+        //public async Task<List<TransformerHourlyEnergyDto>> GetHourlyEnergyPerTransformer(
+        //    int factoryId,
+        //    int? transformerId,
+        //    int? zoneId,
+        //    DateTime startTime,
+        //    DateTime endTime,
+        //    bool isCurrentShift)
+        //{
+        //    // Factory level: hourly energy per transformer.
+        //    if (!transformerId.HasValue && !zoneId.HasValue)
+        //    {
+        //        return await GetTransformerHourlyEnergyList(
+        //            factoryId,
+        //            null,
+        //            startTime,
+        //            endTime,
+        //            isCurrentShift);
+        //    }
+
+        //    // Transformer level: hourly energy per zone.
+        //    if (transformerId.HasValue && !zoneId.HasValue)
+        //    {
+        //        var zones = await GetZonesByTransformer(factoryId, transformerId.Value);
+
+        //        var transformerHourlyData = await GetTransformerHourlyEnergyList(
+        //            factoryId,
+        //            transformerId.Value,
+        //            startTime,
+        //            endTime,
+        //            isCurrentShift);
+
+        //        return transformerHourlyData
+        //            .SelectMany(hour => zones.Select(zone => new TransformerHourlyEnergyDto
+        //            {
+        //                FactoryId = factoryId,
+        //                TransformerId = zone.Id,
+        //                TransformerName = zone.Name,
+        //                HourStartTime = hour.HourStartTime,
+        //                TotalEnergyConsumption = hour.TotalEnergyConsumption * zone.Ratio
+        //            }))
+        //            .OrderBy(x => x.HourStartTime)
+        //            .ToList();
+        //    }
+
+        //    // Zone level: hourly energy per line.
+        //    if (transformerId.HasValue && zoneId.HasValue)
+        //    {
+        //        decimal zoneRatio = await GetZoneRatio(
+        //            factoryId,
+        //            transformerId.Value,
+        //            zoneId.Value);
+
+        //        var lines = await GetLinesByZone(factoryId, zoneId.Value);
+
+        //        var transformerHourlyData = await GetTransformerHourlyEnergyList(
+        //            factoryId,
+        //            transformerId.Value,
+        //            startTime,
+        //            endTime,
+        //            isCurrentShift);
+
+        //        return transformerHourlyData
+        //            .SelectMany(hour =>
+        //            {
+        //                decimal zoneHourEnergy = hour.TotalEnergyConsumption * zoneRatio;
+
+        //                return lines.Select(line => new TransformerHourlyEnergyDto
+        //                {
+        //                    FactoryId = factoryId,
+        //                    TransformerId = line.Id,
+        //                    TransformerName = line.Name,
+        //                    HourStartTime = hour.HourStartTime,
+        //                    TotalEnergyConsumption = zoneHourEnergy * line.Ratio
+        //                });
+        //            })
+        //            .OrderBy(x => x.HourStartTime)
+        //            .ToList();
+        //    }
+
+        //    throw new Exception("Invalid filters.");
+        //}
+
+        //public async Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(
+        //    int factoryId,
+        //    int? transformerId,
+        //    int? zoneId,
+        //    DateTime startTime,
+        //    DateTime endTime,
+        //    bool isCurrentShift,
+        //    int top)
+        //{
+        //    var data = await GetTotalEnergyPerTransformer(
+        //        factoryId,
+        //        transformerId,
+        //        zoneId,
+        //        startTime,
+        //        endTime,
+        //        isCurrentShift);
+
+        //    decimal totalEnergy = data.Sum(x => x.TotalEnergyConsumption);
+
+        //    return data
+        //        .OrderByDescending(x => x.TotalEnergyConsumption)
+        //        .Take(top)
+        //        .Select((x, index) => new TopEnergyConsumerDto
+        //        {
+        //            Rank = index + 1,
+        //            TransformerId = x.TransformerId,
+        //            TransformerName = x.TransformerName,
+        //            TotalEnergyConsumption = x.TotalEnergyConsumption,
+        //            PercentageOfTotal = totalEnergy > 0
+        //                ? Math.Round(x.TotalEnergyConsumption / totalEnergy * 100, 0)
+        //                : 0
+        //        })
+        //        .ToList();
+        //}
+
+
+
+        public async Task<List<EnergyConsumptionDto>> GetTotalEnergyPerTransformer(
+    int factoryId,
+    int? transformerId,
+    int? zoneId,
+    DateTime startTime,
+    DateTime endTime,
+    bool isCurrentShift)
         {
             // Factory level: return transformers.
             if (!transformerId.HasValue && !zoneId.HasValue)
             {
-                return await GetTransformerTotalEnergyList(
+                var transformers = await GetTransformerTotalEnergyList(
                     factoryId,
                     startTime,
                     endTime,
                     isCurrentShift);
+
+                return transformers.Select(x => new EnergyConsumptionDto
+                {
+                    Level = "Transformer",
+
+                    TransformerId = x.TransformerId,
+                    TransformerName = x.TransformerName,
+
+                    Energy = x.TotalEnergyConsumption
+                }).ToList();
             }
 
             // Transformer level: return zones.
@@ -1595,11 +1792,16 @@ namespace DAL.Repositories.Implementation
                     endTime,
                     isCurrentShift);
 
-                return zones.Select(z => new TransformerEnergyDto
+                return zones.Select(z => new EnergyConsumptionDto
                 {
-                    TransformerId = z.Id,
-                    TransformerName = z.Name,
-                    TotalEnergyConsumption = transformerEnergy * z.Ratio
+                    Level = "Zone",
+
+                    TransformerId = transformerId.Value,
+
+                    ZoneId = z.Id,
+                    ZoneName = z.Name,
+
+                    Energy = transformerEnergy * z.Ratio
                 }).ToList();
             }
 
@@ -1622,34 +1824,54 @@ namespace DAL.Repositories.Implementation
 
                 decimal zoneEnergy = transformerEnergy * zoneRatio;
 
-                return lines.Select(l => new TransformerEnergyDto
+                return lines.Select(l => new EnergyConsumptionDto
                 {
-                    TransformerId = l.Id,
-                    TransformerName = l.Name,
-                    TotalEnergyConsumption = zoneEnergy * l.Ratio
+                    Level = "Line",
+
+                    TransformerId = transformerId.Value,
+                    ZoneId = zoneId.Value,
+
+                    LineId = l.Id,
+                    LineName = l.Name,
+
+                    Energy = zoneEnergy * l.Ratio
                 }).ToList();
             }
 
-            throw new Exception("Invalid filters.");
+            throw new ArgumentException("Invalid filters.");
         }
 
-        public async Task<List<TransformerHourlyEnergyDto>> GetHourlyEnergyPerTransformer(
-            int factoryId,
-            int? transformerId,
-            int? zoneId,
-            DateTime startTime,
-            DateTime endTime,
-            bool isCurrentShift)
+
+        public async Task<List<HourlyEnergyConsumptionDto>> GetHourlyEnergyPerTransformer(
+    int factoryId,
+    int? transformerId,
+    int? zoneId,
+    DateTime startTime,
+    DateTime endTime,
+    bool isCurrentShift)
         {
             // Factory level: hourly energy per transformer.
             if (!transformerId.HasValue && !zoneId.HasValue)
             {
-                return await GetTransformerHourlyEnergyList(
+                var transformerHourlyData = await GetTransformerHourlyEnergyList(
                     factoryId,
                     null,
                     startTime,
                     endTime,
                     isCurrentShift);
+
+                return transformerHourlyData.Select(x => new HourlyEnergyConsumptionDto
+                {
+                    FactoryId = x.FactoryId,
+                    HourStartTime = x.HourStartTime,
+
+                    Level = "Transformer",
+
+                    TransformerId = x.TransformerId,
+                    TransformerName = x.TransformerName,
+
+                    Energy = x.TotalEnergyConsumption
+                }).ToList();
             }
 
             // Transformer level: hourly energy per zone.
@@ -1665,13 +1887,19 @@ namespace DAL.Repositories.Implementation
                     isCurrentShift);
 
                 return transformerHourlyData
-                    .SelectMany(hour => zones.Select(zone => new TransformerHourlyEnergyDto
+                    .SelectMany(hour => zones.Select(zone => new HourlyEnergyConsumptionDto
                     {
                         FactoryId = factoryId,
-                        TransformerId = zone.Id,
-                        TransformerName = zone.Name,
                         HourStartTime = hour.HourStartTime,
-                        TotalEnergyConsumption = hour.TotalEnergyConsumption * zone.Ratio
+
+                        Level = "Zone",
+
+                        TransformerId = transformerId.Value,
+
+                        ZoneId = zone.Id,
+                        ZoneName = zone.Name,
+
+                        Energy = hour.TotalEnergyConsumption * zone.Ratio
                     }))
                     .OrderBy(x => x.HourStartTime)
                     .ToList();
@@ -1699,30 +1927,38 @@ namespace DAL.Repositories.Implementation
                     {
                         decimal zoneHourEnergy = hour.TotalEnergyConsumption * zoneRatio;
 
-                        return lines.Select(line => new TransformerHourlyEnergyDto
+                        return lines.Select(line => new HourlyEnergyConsumptionDto
                         {
                             FactoryId = factoryId,
-                            TransformerId = line.Id,
-                            TransformerName = line.Name,
                             HourStartTime = hour.HourStartTime,
-                            TotalEnergyConsumption = zoneHourEnergy * line.Ratio
+
+                            Level = "Line",
+
+                            TransformerId = transformerId.Value,
+                            ZoneId = zoneId.Value,
+
+                            LineId = line.Id,
+                            LineName = line.Name,
+
+                            Energy = zoneHourEnergy * line.Ratio
                         });
                     })
                     .OrderBy(x => x.HourStartTime)
                     .ToList();
             }
 
-            throw new Exception("Invalid filters.");
+            throw new ArgumentException("Invalid filters.");
         }
 
-        public async Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(
-            int factoryId,
-            int? transformerId,
-            int? zoneId,
-            DateTime startTime,
-            DateTime endTime,
-            bool isCurrentShift,
-            int top)
+
+        public async Task<List<TopEnergyConsumerDtoV1>> GetTopEnergyConsumers(
+    int factoryId,
+    int? transformerId,
+    int? zoneId,
+    DateTime startTime,
+    DateTime endTime,
+    bool isCurrentShift,
+    int top)
         {
             var data = await GetTotalEnergyPerTransformer(
                 factoryId,
@@ -1732,23 +1968,36 @@ namespace DAL.Repositories.Implementation
                 endTime,
                 isCurrentShift);
 
-            decimal totalEnergy = data.Sum(x => x.TotalEnergyConsumption);
+            decimal totalEnergy = data.Sum(x => x.Energy);
 
             return data
-                .OrderByDescending(x => x.TotalEnergyConsumption)
+                .OrderByDescending(x => x.Energy)
                 .Take(top)
-                .Select((x, index) => new TopEnergyConsumerDto
+                .Select((x, index) => new TopEnergyConsumerDtoV1
                 {
                     Rank = index + 1,
+
+                    Level = x.Level,
+
                     TransformerId = x.TransformerId,
                     TransformerName = x.TransformerName,
-                    TotalEnergyConsumption = x.TotalEnergyConsumption,
+
+                    ZoneId = x.ZoneId,
+                    ZoneName = x.ZoneName,
+
+                    LineId = x.LineId,
+                    LineName = x.LineName,
+
+                    Energy = x.Energy,
+
                     PercentageOfTotal = totalEnergy > 0
-                        ? Math.Round(x.TotalEnergyConsumption / totalEnergy * 100, 0)
+                        ? Math.Round(x.Energy / totalEnergy * 100, 0)
                         : 0
                 })
                 .ToList();
         }
+
+
 
         #endregion
 
@@ -1800,7 +2049,7 @@ namespace DAL.Repositories.Implementation
                     groupByHour);
             }
 
-            throw new Exception("Invalid filters.");
+            throw new ArgumentException("Invalid filters.");
         }
 
         private async Task<List<EnergyHeatmapDto>> GetTransformerHeatmap(
@@ -2208,7 +2457,7 @@ namespace DAL.Repositories.Implementation
                 .FirstOrDefaultAsync();
 
             if (zone == null)
-                throw new Exception("Zone does not belong to this transformer or factory.");
+                throw new ArgumentException("Zone does not belong to this transformer or factory.");
 
             return NormalizeRatio(zone.RatioFromParent ?? 0);
         }
@@ -2373,7 +2622,7 @@ namespace DAL.Repositories.Implementation
                 .FirstOrDefaultAsync();
 
             if (threshold == null)
-                throw new Exception($"Energy heatmap threshold for level '{level}' is not configured.");
+                throw new ArgumentException($"Energy heatmap threshold for level '{level}' is not configured.");
 
             return threshold;
         }

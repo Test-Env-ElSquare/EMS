@@ -1,5 +1,4 @@
-﻿using BLL.Dtos;
-using BLL.Services.Abstractions;
+﻿using BLL.Services.Abstractions;
 using DAL.Repositories.Interface;
 using Shared.Dtos;
 using Shared.Dtos.EnergyDashboard;
@@ -20,7 +19,7 @@ namespace BLL.Services.Implementations
         public async Task<TransformerSummaryDto> GetSummary(int? factoryId, int duration, DateTime? from, DateTime? to)
         {
             if (duration == 5)
-                throw new NotImplementedException("Duration 5 not implemented yet.");
+                throw new ArgumentException("Duration 5 not implemented yet.");
             var durationDto = TimeUtilities.GetDurationStartTime(duration, from, to);
             bool isCurrentShift = duration == 0;
             string level = factoryId.HasValue ? "Factory" : "Main";
@@ -155,7 +154,89 @@ namespace BLL.Services.Implementations
         }
 
 
-        public async Task<List<TransformerEnergyDto>> GetTotalEnergyPerTransformer(
+        //    public async Task<List<TransformerEnergyDto>> GetTotalEnergyPerTransformer(
+        //int factoryId,
+        //int? transformerId,
+        //int? zoneId,
+        //int duration,
+        //DateTime? from,
+        //DateTime? to)
+        //    {
+        //        if (duration == 5)
+        //            throw new NotImplementedException("Duration 5 not implemented yet.");
+
+        //        ValidateFilters(factoryId, transformerId, zoneId);
+
+        //        var durationDto = TimeUtilities.GetDurationStartTime(duration, from, to);
+        //        bool isCurrentShift = duration == 0;
+
+        //        return await _energyDashboardRepo.GetTotalEnergyPerTransformer(
+        //            factoryId,
+        //            transformerId,
+        //            zoneId,
+        //            durationDto.fromTime,
+        //            durationDto.toTime,
+        //            isCurrentShift
+        //        );
+        //    }
+
+        //    public async Task<List<TransformerHourlyEnergyDto>> GetHourlyEnergyPerTransformer(
+        //        int factoryId,
+        //        int? transformerId,
+        //        int? zoneId,
+        //        int duration,
+        //        DateTime? from,
+        //        DateTime? to)
+        //    {
+        //        if (duration == 5)
+        //            throw new NotImplementedException("Duration 5 not implemented yet.");
+
+        //        ValidateFilters(factoryId, transformerId, zoneId);
+
+        //        var durationDto = TimeUtilities.GetDurationStartTime(duration, from, to);
+        //        bool isCurrentShift = duration == 0;
+
+        //        return await _energyDashboardRepo.GetHourlyEnergyPerTransformer(
+        //            factoryId,
+        //            transformerId,
+        //            zoneId,
+        //            durationDto.fromTime,
+        //            durationDto.toTime,
+        //            isCurrentShift
+        //        );
+        //    }
+
+        //    public async Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(
+        //        int factoryId,
+        //        int? transformerId,
+        //        int? zoneId,
+        //        int duration,
+        //        DateTime? from,
+        //        DateTime? to,
+        //        int top)
+        //    {
+        //        if (duration == 5)
+        //            throw new NotImplementedException("Duration 5 not implemented yet.");
+
+        //        ValidateFilters(factoryId, transformerId, zoneId);
+
+        //        var durationDto = TimeUtilities.GetDurationStartTime(duration, from, to);
+        //        bool isCurrentShift = duration == 0;
+
+        //        return await _energyDashboardRepo.GetTopEnergyConsumers(
+        //            factoryId,
+        //            transformerId,
+        //            zoneId,
+        //            durationDto.fromTime,
+        //            durationDto.toTime,
+        //            isCurrentShift,
+        //            top
+        //        );
+        //    }
+
+
+
+        public async Task<List<EnergyConsumptionDto>> GetTotalEnergyPerTransformer(
     int factoryId,
     int? transformerId,
     int? zoneId,
@@ -181,7 +262,7 @@ namespace BLL.Services.Implementations
             );
         }
 
-        public async Task<List<TransformerHourlyEnergyDto>> GetHourlyEnergyPerTransformer(
+        public async Task<List<HourlyEnergyConsumptionDto>> GetHourlyEnergyPerTransformer(
             int factoryId,
             int? transformerId,
             int? zoneId,
@@ -207,7 +288,7 @@ namespace BLL.Services.Implementations
             );
         }
 
-        public async Task<List<TopEnergyConsumerDto>> GetTopEnergyConsumers(
+        public async Task<List<TopEnergyConsumerDtoV1>> GetTopEnergyConsumers(
             int factoryId,
             int? transformerId,
             int? zoneId,

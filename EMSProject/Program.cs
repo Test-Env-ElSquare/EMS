@@ -6,6 +6,7 @@ using DAL.Repositories.Implementation.Definitions;
 using DAL.Repositories.Interface;
 using DAL.Repositories.Interface.Definitions;
 using EMS;
+using EMS.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -88,7 +89,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 #region Middleware
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseSwaggerUIWithDocs();
 
 app.UseCors("AllowEmsFrontends");

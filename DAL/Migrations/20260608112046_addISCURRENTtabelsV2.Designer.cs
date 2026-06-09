@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(EmsContext))]
-    partial class EmsContextModelSnapshot : ModelSnapshot
+    [Migration("20260608112046_addISCURRENTtabelsV2")]
+    partial class addISCURRENTtabelsV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,52 +216,6 @@ namespace DAL.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.ToTable("TransformerHourlyAnalysis", "Calculated");
-                });
-
-            modelBuilder.Entity("DAL.Models.Calculated.Historical.TransformerHourlyAnalysisCurrent", b =>
-                {
-                    b.Property<decimal>("AvgTHDi")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("AvgTHDv")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Current")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Hermonics")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("HourStartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("PowerFactor")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("ShiftStartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("TotalEnergyConsumption")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("TransformerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TransformerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Voltage")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.ToTable("TransformerHourlyAnalysisCurrent", "Calculated");
                 });
 
             modelBuilder.Entity("DAL.Models.Calculated.Historical.ZoneAnalysis", b =>

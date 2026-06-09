@@ -140,6 +140,8 @@ namespace EMS.Controllers
             return Ok(result);
         }
 
+
+
         [HttpGet("GetHourlyEnergy")]
         public async Task<IActionResult> GetHourlyEnergy(
             [FromQuery] int factoryId,

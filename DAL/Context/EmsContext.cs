@@ -49,18 +49,21 @@ namespace DAL.Context
         public DbSet<VW_TransformerHourlyAnalysis> VW_TransformerHourlyAnalysis { get; set; }
         public DbSet<TransformerAnalysis> TransformerAnalysis { get; set; }
         public DbSet<TransformerHourlyAnalysis> TransformerHourlyAnalysis { get; set; }
+        public DbSet<TransformerHourlyAnalysisCurrent> TransformerHourlyAnalysisCurrent { get; set; }
 
         //Zones
         public DbSet<VW_ZoneAnalysis> VW_ZoneAnalysis { get; set; }
         public DbSet<VW_ZoneHourlyAnalysis> VW_ZoneHourlyAnalysis { get; set; }
         public DbSet<ZoneAnalysis> ZoneAnalysis { get; set; }
         public DbSet<ZoneHourlyAnalysis> ZoneHourlyAnalysis { get; set; }
+        public DbSet<ZoneHourlyAnalysisCurrent> ZoneHourlyAnalysisCurrent { get; set; }
 
         //Lines
         public DbSet<VW_LineAnalysis> VW_LineAnalysis { get; set; }
         public DbSet<VW_LineHourlyAnalysis> VW_LineHourlyAnalysis { get; set; }
         public DbSet<LineAnalysis> LineAnalysis { get; set; }
         public DbSet<LineHourlyAnalysis> LineHourlyAnalysis { get; set; }
+        public DbSet<LineHourlyAnalysisCurrent> LineHourlyAnalysisCurrent { get; set; }
 
         #endregion
 
@@ -86,11 +89,14 @@ namespace DAL.Context
 
             modelBuilder.Entity<TransformerHourlyAnalysis>().HasNoKey();
             modelBuilder.Entity<TransformerAnalysis>().HasNoKey();
+            modelBuilder.Entity<TransformerHourlyAnalysisCurrent>().HasNoKey();
 
             modelBuilder.Entity<ZoneHourlyAnalysis>().HasNoKey();
+            modelBuilder.Entity<ZoneHourlyAnalysisCurrent>().HasNoKey();
             modelBuilder.Entity<ZoneAnalysis>().HasNoKey();
 
             modelBuilder.Entity<LineHourlyAnalysis>().HasNoKey();
+            modelBuilder.Entity<LineHourlyAnalysisCurrent>().HasNoKey();
             modelBuilder.Entity<LineAnalysis>().HasNoKey();
 
             modelBuilder.Entity<ApplicationUserRole>()

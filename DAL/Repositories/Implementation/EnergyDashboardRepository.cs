@@ -1275,13 +1275,6 @@
 //    }
 //}
 
-
-
-
-
-
-
-
 using BLL.Dtos;
 using DAL.Models.Threshold;
 using DAL.Repositories.Interface;
@@ -1752,6 +1745,205 @@ namespace DAL.Repositories.Implementation
 
 
 
+        //    public async Task<List<EnergyConsumptionDto>> GetTotalEnergyPerTransformer(
+        //int factoryId,
+        //int? transformerId,
+        //int? zoneId,
+        //DateTime startTime,
+        //DateTime endTime,
+        //bool isCurrentShift)
+        //    {
+        //        // Factory level: return transformers.
+        //        if (!transformerId.HasValue && !zoneId.HasValue)
+        //        {
+        //            var transformers = await GetTransformerTotalEnergyList(
+        //                factoryId,
+        //                startTime,
+        //                endTime,
+        //                isCurrentShift);
+
+        //            return transformers.Select(x => new EnergyConsumptionDto
+        //            {
+        //                Level = "Transformer",
+
+        //                TransformerId = x.TransformerId,
+        //                TransformerName = x.TransformerName,
+
+        //                Energy = x.TotalEnergyConsumption
+        //            }).ToList();
+        //        }
+
+        //        // Transformer level: return zones.
+        //        if (transformerId.HasValue && !zoneId.HasValue)
+        //        {
+        //            var zones = await GetZonesByTransformer(factoryId, transformerId.Value);
+
+        //            decimal transformerEnergy = await GetTransformerTotalEnergy(
+        //                factoryId,
+        //                transformerId.Value,
+        //                startTime,
+        //                endTime,
+        //                isCurrentShift);
+
+        //            return zones.Select(z => new EnergyConsumptionDto
+        //            {
+        //                Level = "Zone",
+
+        //                TransformerId = transformerId.Value,
+
+        //                ZoneId = z.Id,
+        //                ZoneName = z.Name,
+
+        //                Energy = transformerEnergy * z.Ratio
+        //            }).ToList();
+        //        }
+
+        //        // Zone level: return lines.
+        //        if (transformerId.HasValue && zoneId.HasValue)
+        //        {
+        //            decimal zoneRatio = await GetZoneRatio(
+        //                factoryId,
+        //                transformerId.Value,
+        //                zoneId.Value);
+
+        //            var lines = await GetLinesByZone(factoryId, zoneId.Value);
+
+        //            decimal transformerEnergy = await GetTransformerTotalEnergy(
+        //                factoryId,
+        //                transformerId.Value,
+        //                startTime,
+        //                endTime,
+        //                isCurrentShift);
+
+        //            decimal zoneEnergy = transformerEnergy * zoneRatio;
+
+        //            return lines.Select(l => new EnergyConsumptionDto
+        //            {
+        //                Level = "Line",
+
+        //                TransformerId = transformerId.Value,
+        //                ZoneId = zoneId.Value,
+
+        //                LineId = l.Id,
+        //                LineName = l.Name,
+
+        //                Energy = zoneEnergy * l.Ratio
+        //            }).ToList();
+        //        }
+
+        //        throw new ArgumentException("Invalid filters.");
+        //    }
+
+
+        //    public async Task<List<HourlyEnergyConsumptionDto>> GetHourlyEnergyPerTransformer(
+        //int factoryId,
+        //int? transformerId,
+        //int? zoneId,
+        //DateTime startTime,
+        //DateTime endTime,
+        //bool isCurrentShift)
+        //    {
+        //        // Factory level: hourly energy per transformer.
+        //        if (!transformerId.HasValue && !zoneId.HasValue)
+        //        {
+        //            var transformerHourlyData = await GetTransformerHourlyEnergyList(
+        //                factoryId,
+        //                null,
+        //                startTime,
+        //                endTime,
+        //                isCurrentShift);
+
+        //            return transformerHourlyData.Select(x => new HourlyEnergyConsumptionDto
+        //            {
+        //                FactoryId = x.FactoryId,
+        //                HourStartTime = x.HourStartTime,
+
+        //                Level = "Transformer",
+
+        //                TransformerId = x.TransformerId,
+        //                TransformerName = x.TransformerName,
+
+        //                Energy = x.TotalEnergyConsumption
+        //            }).ToList();
+        //        }
+
+        //        // Transformer level: hourly energy per zone.
+        //        if (transformerId.HasValue && !zoneId.HasValue)
+        //        {
+        //            var zones = await GetZonesByTransformer(factoryId, transformerId.Value);
+
+        //            var transformerHourlyData = await GetTransformerHourlyEnergyList(
+        //                factoryId,
+        //                transformerId.Value,
+        //                startTime,
+        //                endTime,
+        //                isCurrentShift);
+
+        //            return transformerHourlyData
+        //                .SelectMany(hour => zones.Select(zone => new HourlyEnergyConsumptionDto
+        //                {
+        //                    FactoryId = factoryId,
+        //                    HourStartTime = hour.HourStartTime,
+
+        //                    Level = "Zone",
+
+        //                    TransformerId = transformerId.Value,
+
+        //                    ZoneId = zone.Id,
+        //                    ZoneName = zone.Name,
+
+        //                    Energy = hour.TotalEnergyConsumption * zone.Ratio
+        //                }))
+        //                .OrderBy(x => x.HourStartTime)
+        //                .ToList();
+        //        }
+
+        //        // Zone level: hourly energy per line.
+        //        if (transformerId.HasValue && zoneId.HasValue)
+        //        {
+        //            decimal zoneRatio = await GetZoneRatio(
+        //                factoryId,
+        //                transformerId.Value,
+        //                zoneId.Value);
+
+        //            var lines = await GetLinesByZone(factoryId, zoneId.Value);
+
+        //            var transformerHourlyData = await GetTransformerHourlyEnergyList(
+        //                factoryId,
+        //                transformerId.Value,
+        //                startTime,
+        //                endTime,
+        //                isCurrentShift);
+
+        //            return transformerHourlyData
+        //                .SelectMany(hour =>
+        //                {
+        //                    decimal zoneHourEnergy = hour.TotalEnergyConsumption * zoneRatio;
+
+        //                    return lines.Select(line => new HourlyEnergyConsumptionDto
+        //                    {
+        //                        FactoryId = factoryId,
+        //                        HourStartTime = hour.HourStartTime,
+
+        //                        Level = "Line",
+
+        //                        TransformerId = transformerId.Value,
+        //                        ZoneId = zoneId.Value,
+
+        //                        LineId = line.Id,
+        //                        LineName = line.Name,
+
+        //                        Energy = zoneHourEnergy * line.Ratio
+        //                    });
+        //                })
+        //                .OrderBy(x => x.HourStartTime)
+        //                .ToList();
+        //        }
+
+        //        throw new ArgumentException("Invalid filters.");
+        //    }
+
+
         public async Task<List<EnergyConsumptionDto>> GetTotalEnergyPerTransformer(
     int factoryId,
     int? transformerId,
@@ -1760,205 +1952,363 @@ namespace DAL.Repositories.Implementation
     DateTime endTime,
     bool isCurrentShift)
         {
-            // Factory level: return transformers.
+            // Factory level: return transformers
             if (!transformerId.HasValue && !zoneId.HasValue)
             {
-                var transformers = await GetTransformerTotalEnergyList(
-                    factoryId,
-                    startTime,
-                    endTime,
-                    isCurrentShift);
-
-                return transformers.Select(x => new EnergyConsumptionDto
+                if (isCurrentShift)
                 {
-                    Level = "Transformer",
+                    var data = await _emsContext.VW_TransformerAnalysis
+                        .Where(x => x.FactoryId == factoryId)
+                        .ToListAsync();
 
-                    TransformerId = x.TransformerId,
-                    TransformerName = x.TransformerName,
+                    return data.Select(x => new EnergyConsumptionDto
+                    {
+                        Level = "Transformer",
+                        TransformerId = x.TransformerId,
+                        TransformerName = x.TransformerName,
+                        Energy = x.TotalEnergyConsumption
+                    }).ToList();
+                }
+                else
+                {
+                    var data = await _emsContext.TransformerAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.ShiftStartTime >= startTime &&
+                            x.ShiftStartTime <= endTime)
+                        .GroupBy(x => new { x.TransformerId, x.TransformerName })
+                        .Select(g => new EnergyConsumptionDto
+                        {
+                            Level = "Transformer",
+                            TransformerId = g.Key.TransformerId,
+                            TransformerName = g.Key.TransformerName,
+                            Energy = g.Sum(x => x.TotalEnergyConsumption)
+                        })
+                        .ToListAsync();
 
-                    Energy = x.TotalEnergyConsumption
-                }).ToList();
+                    return data;
+                }
             }
 
-            // Transformer level: return zones.
+            // Transformer level: return zones
             if (transformerId.HasValue && !zoneId.HasValue)
             {
-                var zones = await GetZonesByTransformer(factoryId, transformerId.Value);
-
-                decimal transformerEnergy = await GetTransformerTotalEnergy(
-                    factoryId,
-                    transformerId.Value,
-                    startTime,
-                    endTime,
-                    isCurrentShift);
-
-                return zones.Select(z => new EnergyConsumptionDto
+                if (isCurrentShift)
                 {
-                    Level = "Zone",
+                    var data = await _emsContext.VW_ZoneAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.TransformerId == transformerId)
+                        .ToListAsync();
 
-                    TransformerId = transformerId.Value,
+                    return data.Select(x => new EnergyConsumptionDto
+                    {
+                        Level = "Zone",
+                        TransformerId = transformerId.Value,
+                        ZoneId = x.ZoneId,
+                        ZoneName = x.ZoneName,
+                        Energy = x.EnergyConsumption
+                    }).ToList();
+                }
+                else
+                {
+                    var data = await _emsContext.ZoneAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.TransformerId == transformerId &&
+                            x.ShiftStartTime >= startTime &&
+                            x.ShiftStartTime <= endTime)
+                        .GroupBy(x => new { x.ZoneId, x.ZoneName })
+                        .Select(g => new EnergyConsumptionDto
+                        {
+                            Level = "Zone",
+                            TransformerId = transformerId.Value,
+                            ZoneId = g.Key.ZoneId,
+                            ZoneName = g.Key.ZoneName,
+                            Energy = g.Sum(x => x.EnergyConsumption)
+                        })
+                        .ToListAsync();
 
-                    ZoneId = z.Id,
-                    ZoneName = z.Name,
-
-                    Energy = transformerEnergy * z.Ratio
-                }).ToList();
+                    return data;
+                }
             }
 
-            // Zone level: return lines.
+            // Zone level: return lines
             if (transformerId.HasValue && zoneId.HasValue)
             {
-                decimal zoneRatio = await GetZoneRatio(
-                    factoryId,
-                    transformerId.Value,
-                    zoneId.Value);
-
-                var lines = await GetLinesByZone(factoryId, zoneId.Value);
-
-                decimal transformerEnergy = await GetTransformerTotalEnergy(
-                    factoryId,
-                    transformerId.Value,
-                    startTime,
-                    endTime,
-                    isCurrentShift);
-
-                decimal zoneEnergy = transformerEnergy * zoneRatio;
-
-                return lines.Select(l => new EnergyConsumptionDto
+                if (isCurrentShift)
                 {
-                    Level = "Line",
+                    var data = await _emsContext.VW_LineAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.ZoneId == zoneId)
+                        .ToListAsync();
 
-                    TransformerId = transformerId.Value,
-                    ZoneId = zoneId.Value,
+                    return data.Select(x => new EnergyConsumptionDto
+                    {
+                        Level = "Line",
+                        TransformerId = transformerId.Value,
+                        ZoneId = zoneId.Value,
+                        LineId = x.LineId,
+                        LineName = x.LineName,
+                        Energy = x.EnergyConsumption
+                    }).ToList();
+                }
+                else
+                {
+                    var data = await _emsContext.LineAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.ZoneId == zoneId &&
+                            x.ShiftStartTime >= startTime &&
+                            x.ShiftStartTime <= endTime)
+                        .GroupBy(x => new { x.LineId, x.LineName })
+                        .Select(g => new EnergyConsumptionDto
+                        {
+                            Level = "Line",
+                            TransformerId = transformerId.Value,
+                            ZoneId = zoneId.Value,
+                            LineId = g.Key.LineId,
+                            LineName = g.Key.LineName,
+                            Energy = g.Sum(x => x.EnergyConsumption)
+                        })
+                        .ToListAsync();
 
-                    LineId = l.Id,
-                    LineName = l.Name,
-
-                    Energy = zoneEnergy * l.Ratio
-                }).ToList();
+                    return data;
+                }
             }
 
             throw new ArgumentException("Invalid filters.");
         }
 
-
-        public async Task<List<HourlyEnergyConsumptionDto>> GetHourlyEnergyPerTransformer(
-    int factoryId,
-    int? transformerId,
-    int? zoneId,
-    DateTime startTime,
-    DateTime endTime,
-    bool isCurrentShift)
+        public async Task<List<HourlyEnergyConsumptionDto>> GetHourlyEnergyPerTransformer(int factoryId, int? transformerId, int? zoneId, DateTime startTime, DateTime endTime, bool isCurrentShift)
         {
-            // Factory level: hourly energy per transformer.
+            bool groupByHour = !isCurrentShift ? (endTime - startTime).TotalHours <= 48 : true;
+
+            // Factory level: hourly energy per transformer
             if (!transformerId.HasValue && !zoneId.HasValue)
             {
-                var transformerHourlyData = await GetTransformerHourlyEnergyList(
-                    factoryId,
-                    null,
-                    startTime,
-                    endTime,
-                    isCurrentShift);
-
-                return transformerHourlyData.Select(x => new HourlyEnergyConsumptionDto
+                if (groupByHour)
                 {
-                    FactoryId = x.FactoryId,
-                    HourStartTime = x.HourStartTime,
-
-                    Level = "Transformer",
-
-                    TransformerId = x.TransformerId,
-                    TransformerName = x.TransformerName,
-
-                    Energy = x.TotalEnergyConsumption
-                }).ToList();
-            }
-
-            // Transformer level: hourly energy per zone.
-            if (transformerId.HasValue && !zoneId.HasValue)
-            {
-                var zones = await GetZonesByTransformer(factoryId, transformerId.Value);
-
-                var transformerHourlyData = await GetTransformerHourlyEnergyList(
-                    factoryId,
-                    transformerId.Value,
-                    startTime,
-                    endTime,
-                    isCurrentShift);
-
-                return transformerHourlyData
-                    .SelectMany(hour => zones.Select(zone => new HourlyEnergyConsumptionDto
+                    if (isCurrentShift)
                     {
-                        FactoryId = factoryId,
-                        HourStartTime = hour.HourStartTime,
+                        var data = await _emsContext.TransformerHourlyAnalysisCurrent
+                            .Where(x => x.FactoryId == factoryId)
+                            .ToListAsync();
 
-                        Level = "Zone",
-
-                        TransformerId = transformerId.Value,
-
-                        ZoneId = zone.Id,
-                        ZoneName = zone.Name,
-
-                        Energy = hour.TotalEnergyConsumption * zone.Ratio
-                    }))
-                    .OrderBy(x => x.HourStartTime)
-                    .ToList();
-            }
-
-            // Zone level: hourly energy per line.
-            if (transformerId.HasValue && zoneId.HasValue)
-            {
-                decimal zoneRatio = await GetZoneRatio(
-                    factoryId,
-                    transformerId.Value,
-                    zoneId.Value);
-
-                var lines = await GetLinesByZone(factoryId, zoneId.Value);
-
-                var transformerHourlyData = await GetTransformerHourlyEnergyList(
-                    factoryId,
-                    transformerId.Value,
-                    startTime,
-                    endTime,
-                    isCurrentShift);
-
-                return transformerHourlyData
-                    .SelectMany(hour =>
-                    {
-                        decimal zoneHourEnergy = hour.TotalEnergyConsumption * zoneRatio;
-
-                        return lines.Select(line => new HourlyEnergyConsumptionDto
+                        return data.Select(x => new HourlyEnergyConsumptionDto
                         {
-                            FactoryId = factoryId,
-                            HourStartTime = hour.HourStartTime,
+                            FactoryId = x.FactoryId,
+                            HourStartTime = x.HourStartTime,
+                            Level = "Transformer",
+                            TransformerId = x.TransformerId,
+                            TransformerName = x.TransformerName,
+                            Energy = x.TotalEnergyConsumption
+                        })
+                        .OrderBy(x => x.HourStartTime)
+                        .ToList();
+                    }
+                    else
+                    {
+                        var data = await _emsContext.TransformerHourlyAnalysis
+                            .Where(x =>
+                                x.FactoryId == factoryId &&
+                                x.HourStartTime >= startTime &&
+                                x.HourStartTime <= endTime)
+                            .ToListAsync();
 
-                            Level = "Line",
+                        return data.Select(x => new HourlyEnergyConsumptionDto
+                        {
+                            FactoryId = x.FactoryId,
+                            HourStartTime = x.HourStartTime,
+                            Level = "Transformer",
+                            TransformerId = x.TransformerId,
+                            TransformerName = x.TransformerName,
+                            Energy = x.TotalEnergyConsumption
+                        })
+                        .OrderBy(x => x.HourStartTime)
+                        .ToList();
+                    }
+                }
+                else
+                {
+                    var data = await _emsContext.TransformerAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.ShiftStartTime >= startTime &&
+                            x.ShiftStartTime <= endTime)
+                        .ToListAsync();
 
-                            TransformerId = transformerId.Value,
-                            ZoneId = zoneId.Value,
-
-                            LineId = line.Id,
-                            LineName = line.Name,
-
-                            Energy = zoneHourEnergy * line.Ratio
-                        });
+                    return data.Select(x => new HourlyEnergyConsumptionDto
+                    {
+                        FactoryId = x.FactoryId,
+                        HourStartTime = x.ShiftStartTime,
+                        Level = "Transformer",
+                        TransformerId = x.TransformerId,
+                        TransformerName = x.TransformerName,
+                        Energy = x.TotalEnergyConsumption
                     })
                     .OrderBy(x => x.HourStartTime)
                     .ToList();
+                }
+            }
+
+            // Transformer level: hourly energy per zone
+            if (transformerId.HasValue && !zoneId.HasValue)
+            {
+                if (groupByHour)
+                {
+                    if (isCurrentShift)
+                    {
+                        var data = await _emsContext.ZoneHourlyAnalysisCurrent
+                            .Where(x =>
+                                x.FactoryId == factoryId &&
+                                x.TransformerId == transformerId)
+                            .ToListAsync();
+
+                        return data.Select(x => new HourlyEnergyConsumptionDto
+                        {
+                            FactoryId = factoryId,
+                            HourStartTime = x.HourStartTime,
+                            Level = "Zone",
+                            TransformerId = transformerId.Value,
+                            ZoneId = x.ZoneId,
+                            ZoneName = x.ZoneName,
+                            Energy = x.EnergyConsumption
+                        })
+                        .OrderBy(x => x.HourStartTime)
+                        .ToList();
+                    }
+                    else
+                    {
+                        var data = await _emsContext.ZoneHourlyAnalysis
+                            .Where(x =>
+                                x.FactoryId == factoryId &&
+                                x.TransformerId == transformerId &&
+                                x.HourStartTime >= startTime &&
+                                x.HourStartTime <= endTime)
+                            .ToListAsync();
+
+                        return data.Select(x => new HourlyEnergyConsumptionDto
+                        {
+                            FactoryId = factoryId,
+                            HourStartTime = x.HourStartTime,
+                            Level = "Zone",
+                            TransformerId = transformerId.Value,
+                            ZoneId = x.ZoneId,
+                            ZoneName = x.ZoneName,
+                            Energy = x.EnergyConsumption
+                        })
+                        .OrderBy(x => x.HourStartTime)
+                        .ToList();
+                    }
+                }
+                else
+                {
+                    var data = await _emsContext.ZoneAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.TransformerId == transformerId &&
+                            x.ShiftStartTime >= startTime &&
+                            x.ShiftStartTime <= endTime)
+                        .ToListAsync();
+
+                    return data.Select(x => new HourlyEnergyConsumptionDto
+                    {
+                        FactoryId = factoryId,
+                        HourStartTime = x.ShiftStartTime,
+                        Level = "Zone",
+                        TransformerId = transformerId.Value,
+                        ZoneId = x.ZoneId,
+                        ZoneName = x.ZoneName,
+                        Energy = x.EnergyConsumption
+                    })
+                    .OrderBy(x => x.HourStartTime)
+                    .ToList();
+                }
+            }
+
+            // Zone level: hourly energy per line
+            if (transformerId.HasValue && zoneId.HasValue)
+            {
+                if (groupByHour)
+                {
+                    if (isCurrentShift)
+                    {
+                        var data = await _emsContext.LineHourlyAnalysisCurrent
+                            .Where(x =>
+                                x.FactoryId == factoryId &&
+                                x.ZoneId == zoneId)
+                            .ToListAsync();
+
+                        return data.Select(x => new HourlyEnergyConsumptionDto
+                        {
+                            FactoryId = factoryId,
+                            HourStartTime = x.HourStartTime,
+                            Level = "Line",
+                            TransformerId = transformerId.Value,
+                            ZoneId = zoneId.Value,
+                            LineId = x.LineId,
+                            LineName = x.LineName,
+                            Energy = x.EnergyConsumption
+                        })
+                        .OrderBy(x => x.HourStartTime)
+                        .ToList();
+                    }
+                    else
+                    {
+                        var data = await _emsContext.LineHourlyAnalysis
+                            .Where(x =>
+                                x.FactoryId == factoryId &&
+                                x.ZoneId == zoneId &&
+                                x.HourStartTime >= startTime &&
+                                x.HourStartTime <= endTime)
+                            .ToListAsync();
+
+                        return data.Select(x => new HourlyEnergyConsumptionDto
+                        {
+                            FactoryId = factoryId,
+                            HourStartTime = x.HourStartTime,
+                            Level = "Line",
+                            TransformerId = transformerId.Value,
+                            ZoneId = zoneId.Value,
+                            LineId = x.LineId,
+                            LineName = x.LineName,
+                            Energy = x.EnergyConsumption
+                        })
+                        .OrderBy(x => x.HourStartTime)
+                        .ToList();
+                    }
+                }
+                else
+                {
+                    var data = await _emsContext.LineAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.ZoneId == zoneId &&
+                            x.ShiftStartTime >= startTime &&
+                            x.ShiftStartTime <= endTime)
+                        .ToListAsync();
+
+                    return data.Select(x => new HourlyEnergyConsumptionDto
+                    {
+                        FactoryId = factoryId,
+                        HourStartTime = x.ShiftStartTime,
+                        Level = "Line",
+                        TransformerId = transformerId.Value,
+                        ZoneId = zoneId.Value,
+                        LineId = x.LineId,
+                        LineName = x.LineName,
+                        Energy = x.EnergyConsumption
+                    })
+                    .OrderBy(x => x.HourStartTime)
+                    .ToList();
+                }
             }
 
             throw new ArgumentException("Invalid filters.");
         }
-
-
-        public async Task<List<TopEnergyConsumerDtoV1>> GetTopEnergyConsumers(
-    int factoryId,
-    int? transformerId,
-    int? zoneId,
-    DateTime startTime,
-    DateTime endTime,
-    bool isCurrentShift,
-    int top)
+        public async Task<List<TopEnergyConsumerDtoV1>> GetTopEnergyConsumers(int factoryId, int? transformerId, int? zoneId, DateTime startTime, DateTime endTime, bool isCurrentShift, int top)
         {
             var data = await GetTotalEnergyPerTransformer(
                 factoryId,
@@ -2000,6 +2350,10 @@ namespace DAL.Repositories.Implementation
 
 
         #endregion
+
+
+
+
 
         #region Heatmap
 
@@ -2095,102 +2449,292 @@ namespace DAL.Repositories.Implementation
                 .ToList();
         }
 
+        //private async Task<List<EnergyHeatmapDto>> GetZoneHeatmap(
+        //    int factoryId,
+        //    int transformerId,
+        //    DateTime startTime,
+        //    DateTime endTime,
+        //    bool isCurrentShift,
+        //    bool groupByHour)
+        //{
+        //    var threshold = await GetThreshold("Zone");
+        //    var zones = await GetZonesByTransformer(factoryId, transformerId);
+
+        //    var transformerEnergy = await GetTransformerPeriodEnergy(
+        //        factoryId,
+        //        transformerId,
+        //        startTime,
+        //        endTime,
+        //        isCurrentShift,
+        //        groupByHour);
+
+        //    return transformerEnergy
+        //        .SelectMany(period => zones.Select(zone =>
+        //        {
+        //            decimal zoneEnergy = period.Energy * zone.Ratio;
+
+        //            return new EnergyHeatmapDto
+        //            {
+        //                Date = period.Period,
+        //                PeriodType = groupByHour ? "Hour" : "Day",
+
+        //                Level = "Zone",
+        //                TransformerId = transformerId,
+        //                ZoneId = zone.Id,
+        //                ZoneName = zone.Name,
+
+        //                Energy = zoneEnergy,
+        //                Status = GetEnergyStatus(zoneEnergy, threshold)
+        //            };
+        //        }))
+        //        .OrderBy(x => x.Date)
+        //        .ThenBy(x => x.ZoneName)
+        //        .ToList();
+        //}
         private async Task<List<EnergyHeatmapDto>> GetZoneHeatmap(
-            int factoryId,
-            int transformerId,
-            DateTime startTime,
-            DateTime endTime,
-            bool isCurrentShift,
-            bool groupByHour)
+    int factoryId,
+    int transformerId,
+    DateTime startTime,
+    DateTime endTime,
+    bool isCurrentShift,
+    bool groupByHour)
         {
             var threshold = await GetThreshold("Zone");
-            var zones = await GetZonesByTransformer(factoryId, transformerId);
 
-            var transformerEnergy = await GetTransformerPeriodEnergy(
-                factoryId,
-                transformerId,
-                startTime,
-                endTime,
-                isCurrentShift,
-                groupByHour);
-
-            return transformerEnergy
-                .SelectMany(period => zones.Select(zone =>
+            if (groupByHour)
+            {
+                if (isCurrentShift)
                 {
-                    decimal zoneEnergy = period.Energy * zone.Ratio;
+                    var data = await _emsContext.ZoneHourlyAnalysisCurrent
+                        .Where(x => x.FactoryId == factoryId && x.TransformerId == transformerId)
+                        .ToListAsync();
 
-                    return new EnergyHeatmapDto
+                    return data.Select(x => new EnergyHeatmapDto
                     {
-                        Date = period.Period,
-                        PeriodType = groupByHour ? "Hour" : "Day",
-
+                        Date = x.HourStartTime,
+                        PeriodType = "Hour",
                         Level = "Zone",
                         TransformerId = transformerId,
-                        ZoneId = zone.Id,
-                        ZoneName = zone.Name,
+                        ZoneId = x.ZoneId,
+                        ZoneName = x.ZoneName,
+                        Energy = x.EnergyConsumption,
+                        Status = GetEnergyStatus(x.EnergyConsumption, threshold)
+                    })
+                    .OrderBy(x => x.Date)
+                    .ThenBy(x => x.ZoneName)
+                    .ToList();
+                }
+                else
+                {
+                    var data = await _emsContext.ZoneHourlyAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.TransformerId == transformerId &&
+                            x.HourStartTime >= startTime &&
+                            x.HourStartTime <= endTime)
+                        .ToListAsync();
 
-                        Energy = zoneEnergy,
-                        Status = GetEnergyStatus(zoneEnergy, threshold)
-                    };
-                }))
+                    return data.Select(x => new EnergyHeatmapDto
+                    {
+                        Date = x.HourStartTime,
+                        PeriodType = "Hour",
+                        Level = "Zone",
+                        TransformerId = transformerId,
+                        ZoneId = x.ZoneId,
+                        ZoneName = x.ZoneName,
+                        Energy = x.EnergyConsumption,
+                        Status = GetEnergyStatus(x.EnergyConsumption, threshold)
+                    })
+                    .OrderBy(x => x.Date)
+                    .ThenBy(x => x.ZoneName)
+                    .ToList();
+                }
+            }
+            else
+            {
+                var data = await _emsContext.ZoneAnalysis
+                    .Where(x =>
+                        x.FactoryId == factoryId &&
+                        x.TransformerId == transformerId &&
+                        x.ShiftStartTime >= startTime &&
+                        x.ShiftStartTime <= endTime)
+                    .ToListAsync();
+
+                return data.Select(x => new EnergyHeatmapDto
+                {
+                    Date = x.ShiftStartTime,
+                    PeriodType = "Shift",
+                    Level = "Zone",
+                    TransformerId = transformerId,
+                    ZoneId = x.ZoneId,
+                    ZoneName = x.ZoneName,
+                    Energy = x.EnergyConsumption,
+                    Status = GetEnergyStatus(x.EnergyConsumption, threshold)
+                })
                 .OrderBy(x => x.Date)
                 .ThenBy(x => x.ZoneName)
                 .ToList();
+            }
         }
 
+        //private async Task<List<EnergyHeatmapDto>> GetLineHeatmap(
+        //    int factoryId,
+        //    int transformerId,
+        //    int zoneId,
+        //    DateTime startTime,
+        //    DateTime endTime,
+        //    bool isCurrentShift,
+        //    bool groupByHour)
+        //{
+        //    var threshold = await GetThreshold("Line");
+
+        //    decimal zoneRatio = await GetZoneRatio(factoryId, transformerId, zoneId);
+        //    var lines = await GetLinesByZone(factoryId, zoneId);
+
+        //    var transformerEnergy = await GetTransformerPeriodEnergy(
+        //        factoryId,
+        //        transformerId,
+        //        startTime,
+        //        endTime,
+        //        isCurrentShift,
+        //        groupByHour);
+
+        //    return transformerEnergy
+        //        .SelectMany(period =>
+        //        {
+        //            decimal zoneEnergy = period.Energy * zoneRatio;
+
+        //            return lines.Select(line =>
+        //            {
+        //                decimal lineEnergy = zoneEnergy * line.Ratio;
+
+        //                return new EnergyHeatmapDto
+        //                {
+        //                    Date = period.Period,
+        //                    PeriodType = groupByHour ? "Hour" : "Day",
+
+        //                    Level = "Line",
+        //                    TransformerId = transformerId,
+        //                    ZoneId = zoneId,
+        //                    LineId = line.Id,
+        //                    LineName = line.Name,
+
+        //                    Energy = lineEnergy,
+        //                    Status = GetEnergyStatus(lineEnergy, threshold)
+        //                };
+        //            });
+        //        })
+        //        .OrderBy(x => x.Date)
+        //        .ThenBy(x => x.LineName)
+        //        .ToList();
+        //}
+
+
         private async Task<List<EnergyHeatmapDto>> GetLineHeatmap(
-            int factoryId,
-            int transformerId,
-            int zoneId,
-            DateTime startTime,
-            DateTime endTime,
-            bool isCurrentShift,
-            bool groupByHour)
+    int factoryId,
+    int transformerId,
+    int zoneId,
+    DateTime startTime,
+    DateTime endTime,
+    bool isCurrentShift,
+    bool groupByHour)
         {
             var threshold = await GetThreshold("Line");
 
-            decimal zoneRatio = await GetZoneRatio(factoryId, transformerId, zoneId);
-            var lines = await GetLinesByZone(factoryId, zoneId);
-
-            var transformerEnergy = await GetTransformerPeriodEnergy(
-                factoryId,
-                transformerId,
-                startTime,
-                endTime,
-                isCurrentShift,
-                groupByHour);
-
-            return transformerEnergy
-                .SelectMany(period =>
+            if (groupByHour)
+            {
+                if (isCurrentShift)
                 {
-                    decimal zoneEnergy = period.Energy * zoneRatio;
+                    var data = await _emsContext.LineHourlyAnalysisCurrent
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.ZoneId == zoneId)
+                        .ToListAsync();
 
-                    return lines.Select(line =>
+                    return data.Select(x => new EnergyHeatmapDto
                     {
-                        decimal lineEnergy = zoneEnergy * line.Ratio;
+                        Date = x.HourStartTime,
+                        PeriodType = "Hour",
+                        Level = "Line",
+                        TransformerId = transformerId,
+                        ZoneId = zoneId,
+                        LineId = x.LineId,
+                        LineName = x.LineName,
+                        Energy = x.EnergyConsumption,
+                        Status = GetEnergyStatus(x.EnergyConsumption, threshold)
+                    })
+                    .OrderBy(x => x.Date)
+                    .ThenBy(x => x.LineName)
+                    .ToList();
+                }
+                else
+                {
+                    var data = await _emsContext.LineHourlyAnalysis
+                        .Where(x =>
+                            x.FactoryId == factoryId &&
+                            x.ZoneId == zoneId &&
+                            x.HourStartTime >= startTime &&
+                            x.HourStartTime <= endTime)
+                        .ToListAsync();
 
-                        return new EnergyHeatmapDto
-                        {
-                            Date = period.Period,
-                            PeriodType = groupByHour ? "Hour" : "Day",
+                    return data.Select(x => new EnergyHeatmapDto
+                    {
+                        Date = x.HourStartTime,
+                        PeriodType = "Hour",
+                        Level = "Line",
+                        TransformerId = transformerId,
+                        ZoneId = zoneId,
+                        LineId = x.LineId,
+                        LineName = x.LineName,
+                        Energy = x.EnergyConsumption,
+                        Status = GetEnergyStatus(x.EnergyConsumption, threshold)
+                    })
+                    .OrderBy(x => x.Date)
+                    .ThenBy(x => x.LineName)
+                    .ToList();
+                }
+            }
+            else
+            {
+                var data = await _emsContext.LineAnalysis
+                    .Where(x =>
+                        x.FactoryId == factoryId &&
+                        x.ZoneId == zoneId &&
+                        x.ShiftStartTime >= startTime &&
+                        x.ShiftStartTime <= endTime)
+                    .ToListAsync();
 
-                            Level = "Line",
-                            TransformerId = transformerId,
-                            ZoneId = zoneId,
-                            LineId = line.Id,
-                            LineName = line.Name,
-
-                            Energy = lineEnergy,
-                            Status = GetEnergyStatus(lineEnergy, threshold)
-                        };
-                    });
+                return data.Select(x => new EnergyHeatmapDto
+                {
+                    Date = x.ShiftStartTime,
+                    PeriodType = "Shift",
+                    Level = "Line",
+                    TransformerId = transformerId,
+                    ZoneId = zoneId,
+                    LineId = x.LineId,
+                    LineName = x.LineName,
+                    Energy = x.EnergyConsumption,
+                    Status = GetEnergyStatus(x.EnergyConsumption, threshold)
                 })
                 .OrderBy(x => x.Date)
                 .ThenBy(x => x.LineName)
                 .ToList();
+            }
         }
 
         #endregion
+
+
+
+
+
+
+
+
+
+
+
+
 
         #region Shared Data Helpers
 
@@ -2464,6 +3008,16 @@ namespace DAL.Repositories.Implementation
 
         #endregion
 
+
+
+
+
+
+
+
+
+
+
         #region Summary Helpers
 
         private Task<List<int>> GetFactoryIds(int? factoryId)
@@ -2613,6 +3167,14 @@ namespace DAL.Repositories.Implementation
 
         #endregion
 
+
+
+
+
+
+
+
+
         #region Threshold Helpers
 
         private async Task<EnergyHeatmapThreshold> GetThreshold(string level)
@@ -2645,6 +3207,12 @@ namespace DAL.Repositories.Implementation
 
         #endregion
 
+
+
+
+
+
+
         #region Utility Helpers
 
         private static decimal NormalizeRatio(decimal ratio)
@@ -2664,6 +3232,16 @@ namespace DAL.Repositories.Implementation
         }
 
         #endregion
+
+
+
+
+
+
+
+
+
+
 
         #region Private Models
 

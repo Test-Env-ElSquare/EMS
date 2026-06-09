@@ -2,11 +2,10 @@
 
 namespace DAL.Models.Calculated.Historical
 {
-    [Table("LineHourlyAnalysis", Schema = "Calculated")]
+    [Table("LineHourlyAnalysisCurrent", Schema = "Calculated")]
 
-    public class LineHourlyAnalysis
+    public class LineHourlyAnalysisCurrent
     {
-
         public int LineId { get; set; }
         public string LineName { get; set; }
         public int? ZoneId { get; set; }
@@ -16,5 +15,6 @@ namespace DAL.Models.Calculated.Historical
         public decimal Availability { get; set; }
         public decimal AdjustedAvailability { get; set; }
         public decimal EnergyConsumption { get; set; }
+        public string Status { get; set; }
     }
 }
